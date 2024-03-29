@@ -19,7 +19,11 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Feature Module Template"
-include(":app")
-include(":feature:home-impl")
-include(":feature:home-api")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+rootProject.name = "feature-module-template"
+include(
+    ":app",
+    ":feature:home_api",
+    ":feature:home_impl",
+)

@@ -47,6 +47,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.homeImpl)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
