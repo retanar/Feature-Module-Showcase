@@ -25,7 +25,7 @@ Modules' naming scheme is snake_case.
 
 Single Activity containing bottom navigation bar and Compose screens.
 
-UI architecture: MVVM with (possibly) MVI.
+UI architecture: MVVM with MVI.
 State is passed to UI, Events are passed to ViewModel. No Effects.
 Single state stream can be separated into multiple streams if needed.
 
@@ -42,5 +42,16 @@ observed in the module responsible for navigation (currently: app module).
 Version catalogs are used for version management. Additionally, convention plugins are added in
 buildSrc for easier management of android files, such as
 [convention-android-library](buildSrc/src/main/kotlin/convention-android-library.gradle.kts).
-Convention plugins introduce some issues with using version catalogs, especially in plugins{}
-blocks.
+Convention plugins introduce some issues when using version catalogs in them, especially in
+`plugins{}` blocks, so some workarounds were applied where possible.
+
+In addition to Android Studio's module creation, a custom gradle task `:createLibraryModule` was
+added, that automatically adds convention-android-library plugin to new module. Source can be found
+in [CreateAndroidModuleTask](buildSrc/src/main/kotlin/CreateAndroidModuleTask.kt), and setup in
+root [build.gradle.kts](build.gradle.kts).
+
+Example, creating module 'module1' in subdirectory 'feature':
+
+```
+./gradlew createLibraryModule --name :feature:module1
+```

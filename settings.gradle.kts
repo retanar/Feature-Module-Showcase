@@ -26,4 +26,5 @@ include(
     ":app",
     ":feature:home_api",
     ":feature:home_impl",
+    "core",
 )
