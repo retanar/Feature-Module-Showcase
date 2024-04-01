@@ -1,4 +1,4 @@
-package com.featuremodule.template
+package com.featuremodule.core.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
