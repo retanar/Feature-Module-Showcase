@@ -47,6 +47,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.homeApi)
     implementation(projects.feature.homeImpl)
     implementation(projects.core)
 

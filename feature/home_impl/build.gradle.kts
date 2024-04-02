@@ -7,4 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.homeApi)
+
+    implementation(libs.navigation.compose)
 }
