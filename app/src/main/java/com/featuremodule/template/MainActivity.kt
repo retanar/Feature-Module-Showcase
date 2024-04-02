@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.featuremodule.core.ui.theme.AppTheme
-import com.featuremodule.template.ui.AppScaffold
+import com.featuremodule.template.ui.AppContent
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AppTheme {
-                AppScaffold()
+                AppContent()
             }
         }
     }
