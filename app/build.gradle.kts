@@ -1,8 +1,8 @@
 plugins {
     id(libs.plugins.android.application.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
-    alias(libs.plugins.hilt.android)
-    alias(libs.plugins.ksp)
+    id(libs.plugins.hilt.android.get().pluginId)
+    id(libs.plugins.ksp.get().pluginId)
 }
 
 kotlin {

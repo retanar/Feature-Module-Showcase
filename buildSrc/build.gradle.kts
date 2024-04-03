@@ -11,6 +11,8 @@ repositories {
 dependencies {
     implementation(libs.android.plugin)
     implementation(libs.kotlin.plugin)
+    implementation(libs.hilt.plugin)
+    implementation(libs.ksp.plugin)
 
     // Workaround to use Hilt with proper javapoet version
     // Refer to https://github.com/google/dagger/issues/3068#issuecomment-999118496

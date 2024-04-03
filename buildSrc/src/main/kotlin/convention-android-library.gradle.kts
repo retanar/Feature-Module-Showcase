@@ -12,6 +12,8 @@ plugins {
     // Still can't access libs in plugins
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 kotlin {
@@ -53,4 +55,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.material3)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 }

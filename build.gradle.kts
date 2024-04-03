@@ -3,8 +3,8 @@ plugins {
     id(libs.plugins.android.application.get().pluginId) apply false
     id(libs.plugins.kotlin.android.get().pluginId) apply false
     id(libs.plugins.android.library.get().pluginId) apply false
-    alias(libs.plugins.hilt.android) apply false
-    alias(libs.plugins.ksp) apply false
+    id(libs.plugins.hilt.android.get().pluginId) apply false
+    id(libs.plugins.ksp.get().pluginId) apply false
 }
 
 tasks.register<CreateAndroidModuleTask>("createLibraryModule") {
