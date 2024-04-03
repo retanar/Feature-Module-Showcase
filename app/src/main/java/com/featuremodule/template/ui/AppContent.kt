@@ -1,6 +1,5 @@
 package com.featuremodule.template.ui
 
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
@@ -21,7 +20,6 @@ import androidx.navigation.compose.rememberNavController
 import com.featuremodule.core.navigation.NavigationCommand
 import com.featuremodule.core.navigation.NavigationManager
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun AppContent() {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -52,6 +50,7 @@ internal fun AppContent() {
     }
 }
 
+// Cannot be easily moved to :core due to dependency on navigation library
 private fun NavHostController.handleCommand(command: NavigationCommand) {
     when (command) {
         is NavigationCommand.Forward -> navigate(command.route)
