@@ -3,9 +3,10 @@ package com.featuremodule.core.navigation
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import javax.inject.Singleton
 
-// TODO: convert to singleton with Hilt
-object NavigationManager {
+@Singleton
+class NavigationManager {
     private val _commands = MutableSharedFlow<NavigationCommand>(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST

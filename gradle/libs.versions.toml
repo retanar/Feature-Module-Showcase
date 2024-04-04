@@ -12,6 +12,7 @@ compose-bom = "2024.03.00"
 appcompat = "1.6.1"
 navigation = "2.7.7"
 hilt = "2.51.1"
+androidx-hilt = "1.2.0"
 javapoet = "1.13.0"
 
 sdk-compile = "34"
@@ -46,6 +47,7 @@ compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+androidx-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidx-hilt" }
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 
 [plugins]

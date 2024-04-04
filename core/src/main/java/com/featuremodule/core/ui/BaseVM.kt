@@ -13,11 +13,20 @@ interface UiState
 interface UiEvent
 
 abstract class BaseVM<State : UiState, Event : UiEvent> : ViewModel() {
+    // Lazy on both states is needed to pass parameters from child ViewModel's dependencies
+    // to initialState(). Otherwise initialState() will be called before child ViewModel has time to
+    // run the constructor (and receive dependencies).
     private val _state: MutableStateFlow<State> by lazy { MutableStateFlow(initialState()) }
+
     /** State to be consumed by UI */
-    val state = _state.asStateFlow()
+    val state by lazy { _state.asStateFlow() }
 
     protected abstract fun initialState(): State
+
+    @Synchronized
+    protected fun setState(action: State.() -> State) {
+        _state.value = _state.value.action()
+    }
 
     // Extra capacity added to possibly make emit suspend less
     private val event = MutableSharedFlow<Event>(extraBufferCapacity = 1)

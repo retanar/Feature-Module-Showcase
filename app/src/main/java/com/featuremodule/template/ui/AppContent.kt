@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -18,24 +20,32 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.featuremodule.core.navigation.NavigationCommand
-import com.featuremodule.core.navigation.NavigationManager
 
 @Composable
-internal fun AppContent() {
+internal fun AppContent(
+    viewModel: MainVM = hiltViewModel(),
+) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
 
-    LaunchedEffect(lifecycle, NavigationManager.commands) {
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(lifecycle, state.commands) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            NavigationManager.commands.collect {
+            state.commands.collect {
                 navController.handleCommand(it)
             }
         }
     }
 
     Scaffold(
-        bottomBar = { AppNavBar(NavigationManager, backStackEntry?.destination) },
+        bottomBar = {
+            AppNavBar(
+                openNavBarRoute = { viewModel.postEvent(Event.OpenNavBarRoute(it)) },
+                currentDestination = backStackEntry?.destination
+            )
+        },
         contentWindowInsets = WindowInsets(0),
         // Remove this and status bar coloring in AppTheme for edge to edge
         modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)
@@ -62,7 +72,7 @@ private fun NavHostController.handleCommand(command: NavigationCommand) {
             }
         }
 
-        is NavigationCommand.OpenNavBarDestination -> {
+        is NavigationCommand.OpenNavBarRoute -> {
             navigate(command.route) {
                 popUpTo(graph.findStartDestination().id) {
                     saveState = true
