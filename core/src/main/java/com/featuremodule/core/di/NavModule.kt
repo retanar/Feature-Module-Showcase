@@ -1,6 +1,6 @@
 package com.featuremodule.core.di
 
-import com.featuremodule.core.navigation.NavigationManager
+import com.featuremodule.core.navigation.NavManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,8 +9,8 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class NavigationModule {
+class NavModule {
     @Singleton
     @Provides
-    fun provideNavigationManager() = NavigationManager()
+    fun provideNavManager() = NavManager()
 }

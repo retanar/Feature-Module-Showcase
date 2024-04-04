@@ -19,7 +19,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.featuremodule.core.navigation.NavigationCommand
+import com.featuremodule.core.navigation.NavCommand
 
 @Composable
 internal fun AppContent(
@@ -61,18 +61,18 @@ internal fun AppContent(
 }
 
 // Cannot be easily moved to :core due to dependency on navigation library
-private fun NavHostController.handleCommand(command: NavigationCommand) {
+private fun NavHostController.handleCommand(command: NavCommand) {
     when (command) {
-        is NavigationCommand.Forward -> navigate(command.route)
-        NavigationCommand.PopBack -> popBackStack()
-        is NavigationCommand.PopBackWithArguments<*> -> {
+        is NavCommand.Forward -> navigate(command.route)
+        NavCommand.PopBack -> popBackStack()
+        is NavCommand.PopBackWithArguments<*> -> {
             command.args.forEach { (key, value) ->
                 previousBackStackEntry?.savedStateHandle?.set(key, value)
                 popBackStack()
             }
         }
 
-        is NavigationCommand.OpenNavBarRoute -> {
+        is NavCommand.OpenNavBarRoute -> {
             navigate(command.route) {
                 popUpTo(graph.findStartDestination().id) {
                     saveState = true

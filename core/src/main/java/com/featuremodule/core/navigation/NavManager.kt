@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Singleton
 
 @Singleton
-class NavigationManager {
-    private val _commands = MutableSharedFlow<NavigationCommand>(
+class NavManager {
+    private val _commands = MutableSharedFlow<NavCommand>(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
@@ -16,7 +16,7 @@ class NavigationManager {
     // Something is needed to not make this suspend but also emit without overflowing.
     // Or make it suspend.
     @Synchronized
-    fun navigate(command: NavigationCommand) {
+    fun navigate(command: NavCommand) {
         _commands.tryEmit(command)
     }
 }
