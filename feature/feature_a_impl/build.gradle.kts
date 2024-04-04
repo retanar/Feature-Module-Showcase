@@ -8,4 +8,5 @@ android {
 
 dependencies {
     implementation(projects.feature.featureAApi)
+    implementation(projects.core)
 }

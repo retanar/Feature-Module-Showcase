@@ -8,6 +8,8 @@ android {
 
 dependencies {
     implementation(projects.feature.homeApi)
+    implementation(projects.feature.featureAApi)
+    implementation(projects.core)
 
     implementation(libs.navigation.compose)
 }
