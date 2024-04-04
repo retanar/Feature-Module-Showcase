@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.featuremodule.home_api.HomeDestination
 
-fun NavGraphBuilder.registerHomeGraph() {
+fun NavGraphBuilder.registerHome() {
     composable(HomeDestination.route) { backStackEntry ->
         Text(text = backStackEntry.destination.route ?: "null")
     }

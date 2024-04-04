@@ -14,9 +14,9 @@ internal class MainVM @Inject constructor(
 
     override fun handleEvent(event: Event) {
         when (event) {
-            is Event.OpenNavBarRoute -> navManager.navigate(
-                NavCommand.OpenNavBarRoute(event.route)
-            )
+            is Event.OpenNavBarRoute -> launch {
+                navManager.navigate(NavCommand.OpenNavBarRoute(event.route))
+            }
         }
     }
 }

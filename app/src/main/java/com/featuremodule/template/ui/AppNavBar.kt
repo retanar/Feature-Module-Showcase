@@ -28,6 +28,16 @@ internal enum class NavBarItems(
         },
         label = R.string.home_label,
     ),
+    FeatureA(
+        graphRoute = "feature_a_graph",
+        icon = {
+            Icon(
+                painter = painterResource(R.drawable.home),
+                contentDescription = "home"
+            )
+        },
+        label = R.string.feature_a_label
+    )
 }
 
 @Composable

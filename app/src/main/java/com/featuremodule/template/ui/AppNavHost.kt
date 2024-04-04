@@ -5,8 +5,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
+import com.featuremodule.feature_a_api.FeatureADestination
+import com.featuremodule.feature_a_impl.registerFeatureA
 import com.featuremodule.home_api.HomeDestination
-import com.featuremodule.home_impl.registerHomeGraph
+import com.featuremodule.home_impl.registerHome
 
 @Composable
 internal fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -19,7 +21,14 @@ internal fun AppNavHost(navController: NavHostController, modifier: Modifier = M
             startDestination = HomeDestination.route,
             route = NavBarItems.Home.graphRoute
         ) {
-            registerHomeGraph()
+            registerHome()
+        }
+
+        navigation(
+            startDestination = FeatureADestination.route,
+            route = NavBarItems.FeatureA.graphRoute
+        ) {
+            registerFeatureA()
         }
     }
 }

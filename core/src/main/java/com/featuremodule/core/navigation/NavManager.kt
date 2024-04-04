@@ -9,14 +9,11 @@ import javax.inject.Singleton
 class NavManager {
     private val _commands = MutableSharedFlow<NavCommand>(
         extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
+        onBufferOverflow = BufferOverflow.SUSPEND
     )
     val commands = _commands.asSharedFlow()
 
-    // Something is needed to not make this suspend but also emit without overflowing.
-    // Or make it suspend.
-    @Synchronized
-    fun navigate(command: NavCommand) {
-        _commands.tryEmit(command)
+    suspend fun navigate(command: NavCommand) {
+        _commands.emit(command)
     }
 }

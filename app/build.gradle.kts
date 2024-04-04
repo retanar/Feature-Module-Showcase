@@ -51,6 +51,8 @@ android {
 dependencies {
     implementation(projects.feature.homeApi)
     implementation(projects.feature.homeImpl)
+    implementation(projects.feature.featureAApi)
+    implementation(projects.feature.featureAImpl)
     implementation(projects.core)
 
     implementation(libs.androidx.core.ktx)
