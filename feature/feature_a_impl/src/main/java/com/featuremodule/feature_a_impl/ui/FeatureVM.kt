@@ -13,7 +13,7 @@ internal class FeatureVM @Inject constructor(
 ) : BaseVM<State, Event>() {
 
     init {
-        Log.d("FeatureA", "recreated VM")
+        Log.d("FeatureA", "Recreated VM")
         // ViewModel can get arguments from SavedStateHandle, but Screen cannot
         launch {
             savedStateHandle

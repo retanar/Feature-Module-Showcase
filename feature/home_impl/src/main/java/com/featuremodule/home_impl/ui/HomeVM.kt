@@ -1,5 +1,6 @@
 package com.featuremodule.home_impl.ui
 
+import com.featuremodule.core.navigation.NavBarItems
 import com.featuremodule.core.navigation.NavCommand
 import com.featuremodule.core.navigation.NavManager
 import com.featuremodule.core.ui.BaseVM
@@ -18,8 +19,9 @@ internal class HomeVM @Inject constructor(
         when (event) {
             Event.NavigateToFeatureA -> launch {
                 val randomInt = Random.nextInt(10)
-                // FIXME: when you click on Home in NavBar, it restores stack which brings you to
-                //  FeatureA again, making it impossible to go to Home.
+                // Using `saveState = false` causes return to Feature A on Home item click
+                navManager.navigate(NavCommand.OpenNavBarRoute(NavBarItems.FeatureA.graphRoute))
+
                 navManager.navigate(
                     NavCommand.Forward(FeatureADestination.constructRoute(randomInt))
                 )

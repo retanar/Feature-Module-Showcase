@@ -42,7 +42,8 @@ internal fun AppContent(
     Scaffold(
         bottomBar = {
             AppNavBar(
-                openNavBarRoute = { viewModel.postEvent(Event.OpenNavBarRoute(it)) },
+                openNavBarRoute = { route, isSelected ->
+                    viewModel.postEvent(Event.OpenNavBarRoute(route, isSelected)) },
                 currentDestination = backStackEntry?.destination
             )
         },
@@ -75,10 +76,10 @@ private fun NavHostController.handleCommand(command: NavCommand) {
         is NavCommand.OpenNavBarRoute -> {
             navigate(command.route) {
                 popUpTo(graph.findStartDestination().id) {
-                    saveState = true
+                    saveState = command.saveState
                 }
                 launchSingleTop = true
-                restoreState = true
+                restoreState = command.restoreState
             }
         }
     }

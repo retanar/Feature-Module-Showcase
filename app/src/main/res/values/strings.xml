@@ -1,5 +1,3 @@
 <resources>
     <string name="app_name">Feature Module Template</string>
-    <string name="home_label">Home</string>
-    <string name="feature_a_label">Feature A</string>
 </resources>

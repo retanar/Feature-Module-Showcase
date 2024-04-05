@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
+import com.featuremodule.core.navigation.NavBarItems
 import com.featuremodule.feature_a_api.FeatureADestination
 import com.featuremodule.feature_a_impl.registerFeatureA
 import com.featuremodule.home_api.HomeDestination

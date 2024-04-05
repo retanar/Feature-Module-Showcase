@@ -10,5 +10,5 @@ internal data class State(
 ) : UiState
 
 internal sealed interface Event : UiEvent {
-    data class OpenNavBarRoute(val route: String) : Event
+    data class OpenNavBarRoute(val route: String, val isSelected: Boolean) : Event
 }
