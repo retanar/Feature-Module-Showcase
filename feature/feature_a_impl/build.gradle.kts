@@ -1,5 +1,5 @@
 plugins {
-    `convention-android-library`
+    id(libs.plugins.convention.feature.module.get().pluginId)
 }
 
 android {

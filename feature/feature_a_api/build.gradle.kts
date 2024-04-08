@@ -1,5 +1,5 @@
 plugins {
-    `convention-android-library`
+    id(libs.plugins.convention.android.library.get().pluginId)
 }
 
 android {
@@ -7,4 +7,5 @@ android {
 }
 
 dependencies {
+    implementation(libs.navigation.compose)
 }

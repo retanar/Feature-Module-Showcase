@@ -1,7 +1,4 @@
-/**
- * Convention plugin for android library modules.
- * Includes plugins, dependencies, android setup and kotlin toolchain
- */
+/** Convention plugin for android library modules. Includes plugins and android{} setup. */
 
 import org.gradle.accessors.dm.LibrariesForLibs
 
@@ -12,8 +9,6 @@ plugins {
     // Still can't access libs in plugins
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
 }
 
 kotlin {
@@ -48,15 +43,7 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.androidx.compose.bom))
+    // Compose runtime was included for android{} setup
+    implementation(platform(libs.compose.bom))
     implementation(libs.compose.runtime)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.material3)
-
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.hilt.navigation)
-    ksp(libs.hilt.compiler)
 }

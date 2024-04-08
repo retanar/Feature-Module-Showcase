@@ -81,13 +81,15 @@ abstract class CreateAndroidModuleTask : DefaultTask() {
         .writeText("""/build""")
 
     // In case something needs to be added to all modules, firstly, please check if it can be added
-    // to convention-android-library plugin, instead of adding it here
+    // to convention plugins, instead of adding it here
     private fun Path.writeBuildGradle(namespace: String) = this
         .resolve("build.gradle.kts")
         .writeText(
             """
                 plugins {
-                    `convention-android-library`
+                    // TODO: Pick one of the convention plugins
+                    id(libs.plugins.convention.android.library.get().pluginId)
+                    id(libs.plugins.convention.feature.module.get().pluginId)
                 }
         
                 android {

@@ -1,5 +1,5 @@
 plugins {
-    `convention-android-library`
+    id(libs.plugins.convention.feature.module.get().pluginId)
 }
 
 android {
@@ -10,6 +10,4 @@ dependencies {
     implementation(projects.feature.homeApi)
     implementation(projects.feature.featureAApi)
     implementation(projects.core)
-
-    implementation(libs.navigation.compose)
 }
