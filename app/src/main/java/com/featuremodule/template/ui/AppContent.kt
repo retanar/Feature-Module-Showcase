@@ -7,43 +7,36 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.featuremodule.core.navigation.NavCommand
+import com.featuremodule.core.util.CollectWithLifecycle
 
 @Composable
 internal fun AppContent(
     viewModel: MainVM = hiltViewModel(),
 ) {
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
 
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(lifecycle, state.commands) {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            state.commands.collect {
-                navController.handleCommand(it)
-            }
-        }
+    state.commands.CollectWithLifecycle {
+        navController.handleCommand(it)
     }
 
     Scaffold(
         bottomBar = {
             AppNavBar(
                 openNavBarRoute = { route, isSelected ->
-                    viewModel.postEvent(Event.OpenNavBarRoute(route, isSelected)) },
+                    viewModel.postEvent(Event.OpenNavBarRoute(route, isSelected))
+                },
                 currentDestination = backStackEntry?.destination
             )
         },
