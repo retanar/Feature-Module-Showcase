@@ -6,13 +6,13 @@ import androidx.navigation.navArgument
 object FeatureADestination {
     const val ARG_NUM = "argNum"
 
-    const val route = "feature_a?$ARG_NUM={$ARG_NUM}"
+    const val ROUTE = "feature_a?$ARG_NUM={$ARG_NUM}"
 
     val arguments = listOf(
         navArgument(ARG_NUM) {
             defaultValue = Int.MIN_VALUE
             type = NavType.IntType
-        }
+        },
     )
 
     fun constructRoute(argNum: Int? = null) = buildString {

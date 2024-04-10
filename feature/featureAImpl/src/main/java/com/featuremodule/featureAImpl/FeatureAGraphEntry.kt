@@ -7,11 +7,9 @@ import com.featuremodule.featureAImpl.ui.FeatureScreen
 
 fun NavGraphBuilder.registerFeatureA() {
     composable(
-        route = FeatureADestination.route,
-        arguments = FeatureADestination.arguments
+        route = FeatureADestination.ROUTE,
+        arguments = FeatureADestination.arguments,
     ) { backStackEntry ->
-        val argNum = backStackEntry.arguments?.getInt(FeatureADestination.ARG_NUM)!!
-
-        FeatureScreen(route = backStackEntry.destination.route, num = argNum)
+        FeatureScreen(route = backStackEntry.destination.route)
     }
 }

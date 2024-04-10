@@ -19,9 +19,7 @@ import com.featuremodule.core.navigation.NavCommand
 import com.featuremodule.core.util.CollectWithLifecycle
 
 @Composable
-internal fun AppContent(
-    viewModel: MainVM = hiltViewModel(),
-) {
+internal fun AppContent(viewModel: MainVM = hiltViewModel()) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
 
@@ -37,19 +35,19 @@ internal fun AppContent(
                 openNavBarRoute = { route, isSelected ->
                     viewModel.postEvent(Event.OpenNavBarRoute(route, isSelected))
                 },
-                currentDestination = backStackEntry?.destination
+                currentDestination = backStackEntry?.destination,
             )
         },
         contentWindowInsets = WindowInsets(0),
         // Remove this and status bar coloring in AppTheme for edge to edge
-        modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)
+        modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
     ) { innerPadding ->
         AppNavHost(
             navController = navController,
             modifier = Modifier
                 .padding(innerPadding)
                 // Fixes issues with imePadding and NavBar
-                .consumeWindowInsets(innerPadding)
+                .consumeWindowInsets(innerPadding),
         )
     }
 }

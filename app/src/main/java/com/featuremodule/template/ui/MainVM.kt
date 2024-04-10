@@ -19,8 +19,8 @@ internal class MainVM @Inject constructor(
                     NavCommand.OpenNavBarRoute(
                         route = event.route,
                         saveState = !event.isSelected,
-                        restoreState = !event.isSelected
-                    )
+                        restoreState = !event.isSelected,
+                    ),
                 )
             }
         }

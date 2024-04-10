@@ -16,18 +16,18 @@ internal fun AppNavHost(navController: NavHostController, modifier: Modifier = M
     NavHost(
         navController = navController,
         startDestination = NavBarItems.Home.graphRoute,
-        modifier = modifier
+        modifier = modifier,
     ) {
         navigation(
-            startDestination = HomeDestination.route,
-            route = NavBarItems.Home.graphRoute
+            startDestination = HomeDestination.ROUTE,
+            route = NavBarItems.Home.graphRoute,
         ) {
             registerHome()
         }
 
         navigation(
-            startDestination = FeatureADestination.route,
-            route = NavBarItems.FeatureA.graphRoute
+            startDestination = FeatureADestination.ROUTE,
+            route = NavBarItems.FeatureA.graphRoute,
         ) {
             registerFeatureA()
         }

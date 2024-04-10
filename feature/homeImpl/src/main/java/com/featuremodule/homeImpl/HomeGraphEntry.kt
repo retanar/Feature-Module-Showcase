@@ -6,7 +6,7 @@ import com.featuremodule.homeApi.HomeDestination
 import com.featuremodule.homeImpl.ui.HomeScreen
 
 fun NavGraphBuilder.registerHome() {
-    composable(HomeDestination.route) { backStackEntry ->
+    composable(HomeDestination.ROUTE) { backStackEntry ->
         HomeScreen(route = backStackEntry.destination.route)
     }
 }

@@ -35,7 +35,7 @@ internal fun AppNavBar(
                     openNavBarRoute(item.graphRoute, isSelected)
                 },
                 icon = item.icon,
-                label = { Text(stringResource(item.label)) }
+                label = { Text(stringResource(item.label)) },
             )
         }
     }

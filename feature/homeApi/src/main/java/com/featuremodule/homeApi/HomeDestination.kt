@@ -1,5 +1,5 @@
 package com.featuremodule.homeApi
 
 object HomeDestination {
-    const val route = "home"
+    const val ROUTE = "home"
 }

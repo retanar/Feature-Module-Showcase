@@ -18,7 +18,7 @@ enum class NavBarItems(
         icon = {
             Icon(
                 painter = painterResource(R.drawable.home),
-                contentDescription = stringResource(R.string.home_label)
+                contentDescription = stringResource(R.string.home_label),
             )
         },
         label = R.string.home_label,
@@ -28,9 +28,9 @@ enum class NavBarItems(
         icon = {
             Icon(
                 painter = painterResource(R.drawable.home),
-                contentDescription = stringResource(R.string.feature_a_label)
+                contentDescription = stringResource(R.string.feature_a_label),
             )
         },
-        label = R.string.feature_a_label
-    )
+        label = R.string.feature_a_label,
+    ),
 }

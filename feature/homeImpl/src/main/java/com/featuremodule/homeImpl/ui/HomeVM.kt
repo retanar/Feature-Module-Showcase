@@ -18,12 +18,12 @@ internal class HomeVM @Inject constructor(
     override fun handleEvent(event: Event) {
         when (event) {
             Event.NavigateToFeatureA -> launch {
-                val randomInt = Random.nextInt(10)
+                val randomInt = Random.nextInt(until = 10)
                 // Using `saveState = false` causes return to Feature A on Home item click
                 navManager.navigate(NavCommand.OpenNavBarRoute(NavBarItems.FeatureA.graphRoute))
 
                 navManager.navigate(
-                    NavCommand.Forward(FeatureADestination.constructRoute(randomInt))
+                    NavCommand.Forward(FeatureADestination.constructRoute(randomInt)),
                 )
             }
         }
