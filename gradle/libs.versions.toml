@@ -13,6 +13,8 @@ navigation = "2.7.7"
 hilt = "2.51.1"
 hilt-androidx = "1.2.0"
 javapoet = "1.13.0"
+detekt = "1.23.4"
+ktlint = "12.1.0"
 
 # Versions used for android{} setup
 sdk-compile = "34"
@@ -25,6 +27,8 @@ android-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp
 kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 hilt-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 ksp-plugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
+detekt-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+ktlint-plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
 
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
@@ -71,3 +75,4 @@ hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 # Local convention plugins
 convention-android-library = { id = "convention-android-library" }
 convention-feature-module = { id = "convention-feature-module" }
+convention-linters = { id = "convention-linters" }

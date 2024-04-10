@@ -9,6 +9,7 @@ plugins {
     // Still can't access libs in plugins
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("convention-linters")
 }
 
 kotlin {
