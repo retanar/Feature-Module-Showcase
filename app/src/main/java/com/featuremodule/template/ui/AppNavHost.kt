@@ -6,10 +6,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
 import com.featuremodule.core.navigation.NavBarItems
-import com.featuremodule.feature_a_api.FeatureADestination
-import com.featuremodule.feature_a_impl.registerFeatureA
-import com.featuremodule.home_api.HomeDestination
-import com.featuremodule.home_impl.registerHome
+import com.featuremodule.featureAApi.FeatureADestination
+import com.featuremodule.featureAImpl.registerFeatureA
+import com.featuremodule.homeApi.HomeDestination
+import com.featuremodule.homeImpl.registerHome
 
 @Composable
 internal fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) {

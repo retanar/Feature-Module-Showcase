@@ -24,9 +24,9 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "feature-module-template"
 include(
     ":app",
-    ":feature:home_api",
-    ":feature:home_impl",
-    ":feature:feature_a_api",
-    ":feature:feature_a_impl",
+    ":feature:homeApi",
+    ":feature:homeImpl",
+    ":feature:featureAApi",
+    ":feature:featureAImpl",
     "core",
 )

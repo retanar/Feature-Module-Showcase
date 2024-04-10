@@ -19,7 +19,7 @@ Feature modules, each divided into two parts: api and impl. Api modules only con
 navigating to this module, and don't rely on any other modules. Impl modules contain screens,
 implementation for the navigation, and can rely on other api modules for navigating to them.
 
-Modules' naming scheme is snake_case.
+Naming scheme of modules and packages is camelCase.
 
 ### UI
 
