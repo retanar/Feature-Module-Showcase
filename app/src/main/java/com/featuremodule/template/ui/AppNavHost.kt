@@ -11,6 +11,13 @@ import com.featuremodule.featureAImpl.registerFeatureA
 import com.featuremodule.homeApi.HomeDestination
 import com.featuremodule.homeImpl.registerHome
 
+/**
+ * Each [NavBarItems] entry should have it's own navigation block.
+ *
+ * New routes should be added in respective navigation blocks for proper [AppNavBar] item selection,
+ * if the selection logic relies on NavBackStackEntry.
+ * Placing routes outside of any navigation block, will not highlight any item.
+ */
 @Composable
 internal fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(

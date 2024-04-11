@@ -44,7 +44,7 @@ android {
 }
 
 dependencies {
-    // Compose runtime was included for android{} setup
+    // Compose runtime was included for setting up compose in android{}
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.runtime)
 }
