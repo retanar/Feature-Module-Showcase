@@ -33,4 +33,14 @@ enum class NavBarItems(
         },
         label = R.string.feature_a_label,
     ),
+    FeatureB(
+        graphRoute = "feature_b_graph",
+        icon = {
+            Icon(
+                painter = painterResource(R.drawable.home),
+                contentDescription = stringResource(R.string.feature_b_label),
+            )
+        },
+        label = R.string.feature_b_label,
+    ),
 }

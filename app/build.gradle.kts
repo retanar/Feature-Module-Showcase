@@ -54,6 +54,8 @@ dependencies {
     implementation(projects.feature.homeImpl)
     implementation(projects.feature.featureAApi)
     implementation(projects.feature.featureAImpl)
+    implementation(projects.feature.featureBApi)
+    implementation(projects.feature.featureBImpl)
     implementation(projects.core)
 
     implementation(libs.androidx.core.ktx)

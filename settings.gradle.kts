@@ -28,5 +28,7 @@ include(
     ":feature:homeImpl",
     ":feature:featureAApi",
     ":feature:featureAImpl",
+    ":feature:featureBApi",
+    ":feature:featureBImpl",
     "core",
 )
