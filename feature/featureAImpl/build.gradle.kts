@@ -3,10 +3,9 @@ plugins {
 }
 
 android {
-    namespace = "com.featuremodule.feature_a_impl"
+    namespace = "com.featuremodule.featureAImpl"
 }
 
 dependencies {
     implementation(projects.feature.featureAApi)
-    implementation(projects.core)
 }

@@ -9,5 +9,4 @@ android {
 dependencies {
     implementation(projects.feature.homeApi)
     implementation(projects.feature.featureAApi)
-    implementation(projects.core)
 }

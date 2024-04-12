@@ -15,9 +15,7 @@ import kotlin.io.path.writeText
  * - subdirectories/module_name
  *   - .gitignore
  *   - build.gradle.kts
- *   - src/main
- *     - AndroidManifest.xml
- *     - java/base_package/module_name
+ *   - src/main/java/base_package/module_name
  * ```
  */
 abstract class CreateAndroidModuleTask : DefaultTask() {
@@ -38,7 +36,7 @@ abstract class CreateAndroidModuleTask : DefaultTask() {
     @Option(
         option = "name",
         description = "Sets a name for the new module. To place a module in a subdirectory, use " +
-            "syntax :subdirectory:module_name."
+            "syntax :subdirectory:module_name.",
     )
     var moduleName: String = ""
 
@@ -66,14 +64,14 @@ abstract class CreateAndroidModuleTask : DefaultTask() {
         modulePath.writeGitignore()
         modulePath.writeBuildGradle(namespace)
 
-        val srcMain = modulePath / "src" / "main"
-        srcMain.createDirectories()
-        srcMain.writeAndroidManifest()
-
-        val javaAndPackage = srcMain / "java" / namespace.split('.').joinToString(File.separator)
+        val javaAndPackage = modulePath / "src" / "main" / "java" /
+            namespace.split('.').joinToString(File.separator)
         javaAndPackage.createDirectories()
 
-        println("Module $moduleName created, please include it in the settings.gradle.kts file.")
+        println(
+            "Module $moduleName created, please include it in the settings.gradle.kts file " +
+                "and add to :app module.",
+        )
     }
 
     private fun Path.writeGitignore() = this
@@ -91,22 +89,13 @@ abstract class CreateAndroidModuleTask : DefaultTask() {
                     id(libs.plugins.convention.android.library.get().pluginId)
                     id(libs.plugins.convention.feature.module.get().pluginId)
                 }
-        
+
                 android {
                     namespace = "$namespace"
                 }
-        
+
                 dependencies {
                 }
-            """.trimIndent()
-        )
-
-    private fun Path.writeAndroidManifest() = this
-        .resolve("AndroidManifest.xml")
-        .writeText(
-            """
-                <?xml version="1.0" encoding="utf-8"?>
-                <manifest />
-            """.trimIndent()
+            """.trimIndent(),
         )
 }
