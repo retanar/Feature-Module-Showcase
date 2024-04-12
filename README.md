@@ -34,6 +34,11 @@ Single Activity containing bottom navigation bar and Compose screens.
 
 UI architecture: MVVM with MVI. State is passed to UI, Events are passed to ViewModel. No Effects.
 
+Custom CompositionLocalProvider was added to AppTheme for providing
+AppColors ([link](core/src/main/java/com/featuremodule/core/ui/theme)). Provided colors can be
+configured as needed by the design. Moreover it's possible to add other design components, like
+fonts, and thus mostly replace MaterialTheme.
+
 [BaseVM](core/src/main/java/com/featuremodule/core/ui/BaseVM.kt) is a base class for ViewModels.
 
 ### Navigation
