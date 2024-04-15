@@ -6,6 +6,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
+// staticCompositionLocalOf works better for mostly unchanging colors
+val LocalAppColors = staticCompositionLocalOf { AppColors() }
+
 /**
  * Draft for providing own color hierarchy to be used in the same way as MaterialTheme.
  */
@@ -14,9 +17,6 @@ data class AppColors(
     val secondary: Color = PurpleGrey40,
     val tertiary: Color = Pink40,
 )
-
-// staticCompositionLocalOf works better for mostly unchanging colors
-val LocalAppColors = staticCompositionLocalOf { AppColors() }
 
 private val LightAppColors = AppColors()
 

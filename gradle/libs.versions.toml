@@ -15,6 +15,7 @@ hilt-androidx = "1.2.0"
 javapoet = "1.13.0"
 detekt = "1.23.4"
 ktlint = "12.1.0"
+ktlint-compose-rules = "0.3.15"
 
 # Versions used for android{} setup
 sdk-compile = "34"
@@ -29,6 +30,7 @@ hilt-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version
 ksp-plugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 detekt-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 ktlint-plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
+ktlint-compose-rules = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlint-compose-rules" }
 
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
