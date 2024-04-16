@@ -30,5 +30,6 @@ include(
     ":feature:featureAImpl",
     ":feature:featureBApi",
     ":feature:featureBImpl",
-    "core",
+    ":core",
+    ":data",
 )

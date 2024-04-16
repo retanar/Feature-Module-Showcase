@@ -16,6 +16,8 @@ javapoet = "1.13.0"
 detekt = "1.23.4"
 ktlint = "12.1.0"
 ktlint-compose-rules = "0.3.15"
+retrofit = "2.11.0"
+moshi = "1.15.1"
 
 # Versions used for android{} setup
 sdk-compile = "34"
@@ -50,8 +52,12 @@ navigation-compose = { module = "androidx.navigation:navigation-compose", versio
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-androidx" }
-
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
+
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
+moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 
 # Testing
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -65,7 +71,7 @@ compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 [bundles]
 compose = ["androidx-lifecycle-runtime-compose", "compose-ui", "compose-ui-graphics",
     "compose-ui-tooling-preview", "compose-material3", "compose-runtime"]
-
+network = ["retrofit", "retrofit-converter-moshi", "moshi", "moshi-kotlin-codegen"]
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
