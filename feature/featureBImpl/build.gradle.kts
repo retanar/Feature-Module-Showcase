@@ -11,4 +11,5 @@ dependencies {
     implementation(projects.data)
 
     implementation(libs.collections.immutable)
+    implementation(libs.glide.compose)
 }
