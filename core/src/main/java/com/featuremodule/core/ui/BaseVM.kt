@@ -29,17 +29,17 @@ abstract class BaseVM<State : UiState, Event : UiEvent> : ViewModel() {
     }
 
     // Extra capacity added to possibly make emit suspend less
-    private val event = MutableSharedFlow<Event>(extraBufferCapacity = 1)
+    private val events = MutableSharedFlow<Event>(extraBufferCapacity = 1)
 
     /** Allows UI to send events to VM */
     fun postEvent(event: Event) = launch {
-        this@BaseVM.event.emit(event)
+        events.emit(event)
     }
 
     init {
         // Run collection of events
         launch {
-            event.collect(::handleEvent)
+            events.collect(::handleEvent)
         }
     }
 
@@ -49,4 +49,8 @@ abstract class BaseVM<State : UiState, Event : UiEvent> : ViewModel() {
     /** Utility function mirroring viewModelScope.launch() */
     protected fun launch(block: suspend CoroutineScope.() -> Unit): Job =
         viewModelScope.launch(block = block)
+
+    /** Utility property to be used in logging */
+    protected val tag: String
+        get() = this::class.simpleName ?: "BaseVM"
 }

@@ -8,4 +8,7 @@ android {
 
 dependencies {
     implementation(projects.feature.featureBApi)
+    implementation(projects.data)
+
+    implementation(libs.collections.immutable)
 }
