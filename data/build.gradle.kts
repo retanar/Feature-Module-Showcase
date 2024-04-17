@@ -23,4 +23,5 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(libs.bundles.network)
+    ksp(libs.moshi.kotlin.codegen)
 }
