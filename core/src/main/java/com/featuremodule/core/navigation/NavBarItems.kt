@@ -17,30 +17,30 @@ enum class NavBarItems(
         graphRoute = "home_graph",
         icon = {
             Icon(
-                painter = painterResource(R.drawable.home),
+                painter = painterResource(R.drawable.home_navbar),
                 contentDescription = stringResource(R.string.home_label),
             )
         },
         label = R.string.home_label,
     ),
     FeatureA(
-        graphRoute = "feature_a_graph",
+        graphRoute = "feature_graph",
         icon = {
             Icon(
-                painter = painterResource(R.drawable.home),
-                contentDescription = stringResource(R.string.feature_a_label),
+                painter = painterResource(R.drawable.category_navbar),
+                contentDescription = stringResource(R.string.feature_label),
             )
         },
-        label = R.string.feature_a_label,
+        label = R.string.feature_label,
     ),
     FeatureB(
-        graphRoute = "feature_b_graph",
+        graphRoute = "foxes_graph",
         icon = {
             Icon(
-                painter = painterResource(R.drawable.home),
-                contentDescription = stringResource(R.string.feature_b_label),
+                painter = painterResource(R.drawable.fox_navbar),
+                contentDescription = stringResource(R.string.foxes_label),
             )
         },
-        label = R.string.feature_b_label,
+        label = R.string.foxes_label,
     ),
 }

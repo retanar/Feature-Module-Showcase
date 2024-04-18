@@ -8,8 +8,8 @@ import androidx.navigation.navigation
 import com.featuremodule.core.navigation.NavBarItems
 import com.featuremodule.featureAApi.FeatureADestination
 import com.featuremodule.featureAImpl.registerFeatureA
-import com.featuremodule.featureBApi.FeatureBDestination
-import com.featuremodule.featureBImpl.registerFeatureB
+import com.featuremodule.featureBApi.FoxFeatureDestination
+import com.featuremodule.featureBImpl.registerFoxFeature
 import com.featuremodule.homeApi.HomeDestination
 import com.featuremodule.homeImpl.registerHome
 
@@ -42,10 +42,10 @@ internal fun AppNavHost(navController: NavHostController, modifier: Modifier = M
         }
 
         navigation(
-            startDestination = FeatureBDestination.ROUTE,
+            startDestination = FoxFeatureDestination.ROUTE,
             route = NavBarItems.FeatureB.graphRoute,
         ) {
-            registerFeatureB()
+            registerFoxFeature()
         }
     }
 }

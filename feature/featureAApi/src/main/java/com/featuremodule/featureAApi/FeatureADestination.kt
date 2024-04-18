@@ -6,7 +6,7 @@ import androidx.navigation.navArgument
 object FeatureADestination {
     const val ARG_NUM = "argNum"
 
-    const val ROUTE = "feature_a?$ARG_NUM={$ARG_NUM}"
+    const val ROUTE = "feature?$ARG_NUM={$ARG_NUM}"
 
     val arguments = listOf(
         navArgument(ARG_NUM) {
@@ -16,7 +16,7 @@ object FeatureADestination {
     )
 
     fun constructRoute(argNum: Int? = null) = buildString {
-        append("feature_a")
+        append("feature")
         if (argNum != null) {
             append("?$ARG_NUM=$argNum")
         }

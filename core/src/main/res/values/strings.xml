@@ -1,5 +1,5 @@
 <resources>
     <string name="home_label">Home</string>
-    <string name="feature_a_label">Feature A</string>
-    <string name="feature_b_label">Feature B</string>
+    <string name="feature_label">Feature</string>
+    <string name="foxes_label">Foxes</string>
 </resources>

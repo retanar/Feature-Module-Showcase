@@ -1,5 +1,7 @@
 package com.featuremodule.featureBImpl.ui
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -22,14 +24,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.featuremodule.featureBApi.FeatureBDestination
+import com.bumptech.glide.integration.compose.placeholder
+import com.featuremodule.featureBApi.FoxFeatureDestination
 
 @Composable
-internal fun FeatureScreen(viewModel: FeatureVM = hiltViewModel()) {
+internal fun FoxScreen(viewModel: FoxVM = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     Column(Modifier.fillMaxSize()) {
-        Text(FeatureBDestination.ROUTE)
+        Text(FoxFeatureDestination.ROUTE)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -58,6 +61,7 @@ private fun ScreenContent(state: State.Success) {
                     .aspectRatio(ratio = 1f)
                     .padding(all = 2.dp)
                     .fillMaxWidth(),
+                loading = placeholder(ColorDrawable(Color.LTGRAY)),
             )
         }
     }
