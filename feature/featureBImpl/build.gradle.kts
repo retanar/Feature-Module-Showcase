@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.featuremodule.featureBImpl"
+    namespace = "com.featuremodule.foxFeatureImpl"
 }
 
 dependencies {
