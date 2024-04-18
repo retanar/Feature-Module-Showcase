@@ -2,6 +2,9 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
 
 abstract class RenamePackageTask : DefaultTask() {
     @Input
@@ -30,18 +33,24 @@ abstract class RenamePackageTask : DefaultTask() {
             !::toPackageName.isInitialized || toPackageName.isBlank() ->
                 throw IllegalArgumentException("'--to <package>' argument should be provided.")
         }
+        val fromFolders = fromPackageName.replace('.', File.separatorChar)
+        val toFolders = toPackageName.replace('.', File.separatorChar)
 
         project.projectDir.walkBottomUp()
             .onEnter { it.name !in folderBlockList }
             .forEach { entry ->
-                if (!entry.isFile || !entry.canRead()) return@forEach
+                if (entry.isFile && entry.canRead()) {
+                    val oldText = entry.readText()
+                    val newText = oldText.replace(fromPackageName, toPackageName)
 
-                val oldText = entry.readText()
-                val newText = oldText.replace(fromPackageName, toPackageName)
-
-                if (oldText != newText) {
-                    entry.writeText(newText)
-                    println("Rewrote ${entry.absolutePath}")
+                    if (oldText != newText) {
+                        entry.writeText(newText)
+                        println("Rewrote $entry")
+                    }
+                } else if (entry.isDirectory && entry.absolutePath.endsWith(fromFolders)) {
+                    val outputPath = entry.absolutePath.replace(fromFolders, toFolders)
+                    Files.move(entry.toPath(), Path.of(outputPath))
+                    println("Moved $entry, to $outputPath")
                 }
             }
     }
