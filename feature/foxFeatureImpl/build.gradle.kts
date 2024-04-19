@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.featureBApi)
+    implementation(projects.feature.foxFeatureApi)
     implementation(projects.data)
 
     implementation(libs.collections.immutable)
