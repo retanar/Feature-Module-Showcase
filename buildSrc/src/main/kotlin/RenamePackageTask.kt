@@ -7,39 +7,53 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 abstract class RenamePackageTask : DefaultTask() {
+    init {
+        description = """
+            Walks through project files and renames matching package mentions and
+            directories.
+
+            Options --to and --from, and setting 'directoryBlockList' should be provided
+            carefully, as they can cause drastic changes if not set properly.
+            Optionally, project can be cleaned before executing this task, however by
+            default 'build' directories are excluded by 'directoryBlockList'.
+        """.trimIndent()
+    }
+
     @Input
     @Option(
         option = "from",
         description = "Name of the module to be renamed.",
     )
-    lateinit var fromPackageName: String
+    var fromPackageName = ""
 
     @Input
     @Option(
         option = "to",
         description = "Name of the module to rename previous module to.",
     )
-    lateinit var toPackageName: String
+    var toPackageName = ""
 
+    /** Directories that won't be visited for renaming. Can be extended in `tasks.register`. */
     @Input
-    var folderBlockList = hashSetOf(".idea", ".gradle", "build", ".git")
+    var directoryBlockList = hashSetOf(".idea", ".gradle", "build", ".git")
 
     @TaskAction
     fun execute() {
         when {
-            !::fromPackageName.isInitialized || fromPackageName.isBlank() ->
+            fromPackageName.isBlank() ->
                 throw IllegalArgumentException("'--from <package>' argument should be provided.")
 
-            !::toPackageName.isInitialized || toPackageName.isBlank() ->
+            toPackageName.isBlank() ->
                 throw IllegalArgumentException("'--to <package>' argument should be provided.")
         }
         val fromFolders = fromPackageName.replace('.', File.separatorChar)
         val toFolders = toPackageName.replace('.', File.separatorChar)
 
+        // BottomUp is needed to edit files first, then move them into a new directory
         project.projectDir.walkBottomUp()
-            .onEnter { it.name !in folderBlockList }
+            .onEnter { it.name !in directoryBlockList }
             .forEach { entry ->
-                if (entry.isFile && entry.canRead()) {
+                if (entry.isFile && entry.canRead() && entry.canWrite()) {
                     val oldText = entry.readText()
                     val newText = oldText.replace(fromPackageName, toPackageName)
 
