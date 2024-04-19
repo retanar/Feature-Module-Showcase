@@ -8,3 +8,4 @@ tasks.register<CreateAndroidModuleTask>("createLibraryModule") {
 }
 
 tasks.register<RenamePackageTask>("renamePackage")
+tasks.register<RenamePackageTask>("renamePackageForce") { replaceExistingFiles = true }
