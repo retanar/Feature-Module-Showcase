@@ -5,10 +5,7 @@ import org.gradle.api.tasks.options.Option
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.StandardCopyOption.REPLACE_EXISTING
-import kotlin.io.path.pathString
-import kotlin.io.path.relativeTo
 
 abstract class RenamePackageTask : DefaultTask() {
     init {
@@ -21,9 +18,8 @@ abstract class RenamePackageTask : DefaultTask() {
             Optionally, project can be cleaned before executing this task, however by
             default 'build' directories are excluded by 'directoryBlockList'.
 
-            Directory renaming relies on Files.move(), which may fail because it cannot move
-            contents recursively, unless filesystem just renames the directory. This should
-            work for moving on the same partition, and was tested under Linux.
+            Directory renaming tries to use Files.move() first, then recursive moving,
+            both can leave some old directories not removed.
         """.trimIndent()
     }
 
@@ -74,18 +70,63 @@ abstract class RenamePackageTask : DefaultTask() {
                         println("Rewrote ${entry.projectPath()}")
                     }
                 } else if (entry.isDirectory && entry.absolutePath.endsWith(fromFolders)) {
-                    val outputPath = Path.of(entry.absolutePath.replaceLast(fromFolders, toFolders))
+                    val outputPath = File(entry.absolutePath.replaceLast(fromFolders, toFolders))
 
                     try {
-                        // Moving with directories works only as renaming
-                        if (replaceExistingFiles) {
-                            Files.move(entry.toPath(), outputPath, REPLACE_EXISTING)
-                        } else {
-                            Files.move(entry.toPath(), outputPath)
-                        }
+                        // Otherwise can fail with NoSuchFileException
+                        outputPath.parentFile.mkdirs()
 
+                        // Try easy route first. REPLACE_EXISTING here just allows to overwrite
+                        // directory if it's empty.
+                        Files.move(entry.toPath(), outputPath.toPath(), REPLACE_EXISTING)
                         println("Moved ${entry.projectPath()} to ${outputPath.projectPath()}")
                     } catch (e: IOException) {
+                        // Fall back to manual move
+                        moveRecursively(entry, outputPath)
+                    }
+                }
+            }
+    }
+
+    /**
+     * Tries to copy all directories and move all files found by [File.walkTopDown], but leaves
+     * old directories behind.
+     */
+    private fun moveRecursively(
+        srcDir: File,
+        dstDir: File,
+        overwrite: Boolean = replaceExistingFiles
+    ): Boolean {
+        require(srcDir.startsWith(project.projectDir))
+        require(dstDir.startsWith(project.projectDir))
+        var errorHappened = false
+
+        srcDir.walkTopDown()
+            .onEnter { it.name !in directoryBlockList }
+            .forEach { entry ->
+                val relativePath = entry.toRelativeString(srcDir)
+                val outputPath = dstDir.resolve(relativePath)
+
+                if (entry.isDirectory) {
+                    // Directories are visited first: create necessary
+                    outputPath.mkdirs()
+
+                    // mkdirs returns false if directory already exists, so check with exists()
+                    if (!outputPath.exists()) {
+                        System.err.println("Failed to create ${outputPath.projectPath()}")
+                        errorHappened = true
+                    }
+                } else if (entry.isFile) {
+                    // Files are visited last: move to already created directories
+                    try {
+                        if (overwrite) {
+                            Files.move(entry.toPath(), outputPath.toPath(), REPLACE_EXISTING)
+                        } else {
+                            Files.move(entry.toPath(), outputPath.toPath())
+                        }
+                        println("Moved ${entry.projectPath()} to ${outputPath.projectPath()}")
+                    } catch (e: IOException) {
+                        errorHappened = true
                         System.err.println(
                             """
                             Failed to move ${entry.projectPath()} to ${outputPath.projectPath()}
@@ -95,6 +136,7 @@ abstract class RenamePackageTask : DefaultTask() {
                     }
                 }
             }
+        return errorHappened
     }
 
     private fun String.replaceLast(oldValue: String, newValue: String): String {
@@ -104,7 +146,4 @@ abstract class RenamePackageTask : DefaultTask() {
 
     /** Utility function to provide path relative to project directory. */
     private fun File.projectPath(): String = toRelativeString(project.projectDir)
-
-    /** Utility function to provide path relative to project directory. */
-    private fun Path.projectPath(): String = relativeTo(project.projectDir.toPath()).pathString
 }
