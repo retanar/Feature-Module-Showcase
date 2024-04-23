@@ -1,4 +1,4 @@
-package com.featuremodule.featureBImpl.ui
+package com.featuremodule.foxFeatureImpl.ui
 
 import android.util.Log
 import com.featuremodule.core.ui.BaseVM

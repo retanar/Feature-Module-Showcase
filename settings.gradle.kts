@@ -28,8 +28,8 @@ include(
     ":feature:homeImpl",
     ":feature:featureAApi",
     ":feature:featureAImpl",
-    ":feature:featureBApi",
-    ":feature:featureBImpl",
+    ":feature:foxFeatureApi",
+    ":feature:foxFeatureImpl",
     ":core",
     ":data",
 )

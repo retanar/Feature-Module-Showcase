@@ -68,13 +68,25 @@ Main plugins are:
 Convention plugins introduce some issues when using version catalogs in them, especially in
 `plugins{}` blocks, so some workarounds were applied where possible.
 
-In addition to Android Studio's module creation, a custom gradle task `:createLibraryModule` was
-added, that automatically adds build.gradle with convention plugins to the new module. Source can be
-found in [CreateAndroidModuleTask.kt](buildSrc/src/main/kotlin/CreateAndroidModuleTask.kt),
-and setup in root [build.gradle.kts](build.gradle.kts).
+In addition to Android Studio's module creation, a custom gradle task `createLibraryModule` was
+added, that automatically adds build.gradle with convention plugins to the new module.
 
+Source: [CreateAndroidModuleTask.kt](buildSrc/src/main/kotlin/CreateAndroidModuleTask.kt).
 Example, creating module 'module1' in subdirectory 'feature':
 
 ```
 ./gradlew createLibraryModule --name :feature:module1
 ```
+
+Another gradle task `renamePackage` can be used to quickly rename packages, references to them,
+and directories. There is also `renamePackageForce` version, which can overwrite existing files
+when moving directories. **Warning: this task modifies files irreversibly, so caution should be
+exercised.**
+
+Source: [RenamePackageTask.kt](buildSrc/src/main/kotlin/RenamePackageTask.kt). Example usage:
+
+```
+./gradlew renamePackage --from com.featuremodule --to my.new.package
+```
+
+Configuration for all custom tasks can be found in root [build.gradle.kts](build.gradle.kts).

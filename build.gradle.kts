@@ -6,3 +6,6 @@ plugins {
 tasks.register<CreateAndroidModuleTask>("createLibraryModule") {
     basePackageName = "com.featuremodule"
 }
+
+tasks.register<RenamePackageTask>("renamePackage")
+tasks.register<RenamePackageTask>("renamePackageForce") { replaceExistingFiles = true }

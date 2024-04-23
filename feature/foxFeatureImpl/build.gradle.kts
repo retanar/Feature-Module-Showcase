@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.featuremodule.featureBImpl"
+    namespace = "com.featuremodule.foxFeatureImpl"
 }
 
 dependencies {
-    implementation(projects.feature.featureBApi)
+    implementation(projects.feature.foxFeatureApi)
     implementation(projects.data)
 
     implementation(libs.collections.immutable)

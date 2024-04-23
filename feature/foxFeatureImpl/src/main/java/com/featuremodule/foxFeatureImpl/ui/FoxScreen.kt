@@ -1,4 +1,4 @@
-package com.featuremodule.featureBImpl.ui
+package com.featuremodule.foxFeatureImpl.ui
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -25,7 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
-import com.featuremodule.featureBApi.FoxFeatureDestination
+import com.featuremodule.foxFeatureApi.FoxFeatureDestination
 
 @Composable
 internal fun FoxScreen(viewModel: FoxVM = hiltViewModel()) {

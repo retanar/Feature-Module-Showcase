@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.featuremodule.featureBApi"
+    namespace = "com.featuremodule.foxFeatureApi"
 }

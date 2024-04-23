@@ -1,4 +1,4 @@
-package com.featuremodule.featureBImpl.ui
+package com.featuremodule.foxFeatureImpl.ui
 
 import com.featuremodule.core.ui.UiEvent
 import com.featuremodule.core.ui.UiState
