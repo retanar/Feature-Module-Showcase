@@ -15,7 +15,7 @@ internal fun FeatureScreen(route: String?, viewModel: FeatureVM = hiltViewModel(
 
     Column {
         Text(text = route.toString())
-        Text(text = state.argNum.toString())
+        Text(text = "Random number from home: ${state.argNum}")
         Text(
             text = "Current AppColors.primary value is ${
                 AppTheme.colors.primary.toArgb().toUInt().toString(radix = 16)

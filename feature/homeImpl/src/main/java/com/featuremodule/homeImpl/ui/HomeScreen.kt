@@ -11,7 +11,7 @@ internal fun HomeScreen(route: String?, viewModel: HomeVM = hiltViewModel()) {
     Column {
         Text(text = route.toString())
         Button(onClick = { viewModel.postEvent(Event.NavigateToFeatureA) }) {
-            Text(text = "To Feature A")
+            Text(text = "Pass number")
         }
     }
 }
