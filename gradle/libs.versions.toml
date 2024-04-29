@@ -2,13 +2,13 @@
 agp = "8.3.2"
 kotlin = "1.9.23"
 ksp = "1.9.23-1.0.19" # Should match kotlin version
-core-ktx = "1.12.0"
+core-ktx = "1.13.0"
 junit = "4.13.2"
 junit-androidx = "1.1.5"
 espresso-core = "3.5.1"
 lifecycle = "2.7.0"
-activity = "1.8.2"
-compose-bom = "2024.04.00"
+activity = "1.9.0"
+compose-bom = "2024.04.01"
 navigation = "2.7.7"
 hilt = "2.51.1"
 hilt-androidx = "1.2.0"
@@ -25,7 +25,7 @@ glide-compose = "1.0.0-beta01"
 sdk-compile = "34"
 sdk-min = "26"
 jvm-toolchain = "17"
-compose-compiler = "1.5.11"
+compose-compiler = "1.5.12"
 
 [libraries]
 android-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
