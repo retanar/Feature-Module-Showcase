@@ -6,7 +6,6 @@ Template project for starting android development.
 
 ![](readme_res/app_recording_20240423.gif)
 
-
 ### Quick overview
 
 | Feature      | Short description  |
