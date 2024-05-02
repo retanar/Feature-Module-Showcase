@@ -1,0 +1,26 @@
+name: Run Ktlint and Detekt
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  run-linters:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: wrapper
+      - name: Run Ktlint
+        run: ./gradlew ktlintCheck
+      - name: Run Detekt
+        run: ./gradlew detektMain
