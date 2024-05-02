@@ -15,6 +15,9 @@ android {
         debug {
             buildConfigField("String", "API_URL", "\"https://randomfox.ca/\"")
         }
+        release {
+            buildConfigField("String", "API_URL", "\"https://randomfox.ca/\"")
+        }
     }
 }
 

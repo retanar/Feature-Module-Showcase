@@ -20,6 +20,7 @@ retrofit = "2.11.0"
 moshi = "1.15.1"
 collections-immutable = "0.3.7"
 glide-compose = "1.0.0-beta01"
+leakcanary = "2.14"
 
 # Versions used for android{} setup
 sdk-compile = "34"
@@ -73,6 +74,8 @@ androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", vers
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+
+leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
 
 [bundles]
 compose = ["androidx-lifecycle-runtime-compose", "compose-ui", "compose-ui-graphics",

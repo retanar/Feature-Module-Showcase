@@ -1,9 +1,19 @@
+import java.util.Properties
+
 plugins {
     id(libs.plugins.android.application.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
     id(libs.plugins.hilt.android.get().pluginId)
     id(libs.plugins.ksp.get().pluginId)
     id(libs.plugins.convention.linters.get().pluginId)
+}
+
+val keystoreProperties = Properties().apply {
+    rootProject.file("keystore.properties")
+        .takeIf { it.exists() }
+        ?.let {
+            load(it.inputStream())
+        }
 }
 
 kotlin {
@@ -27,13 +37,27 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file(keystoreProperties["storeFile"].toString())
+            storePassword = keystoreProperties["storePassword"].toString()
+            keyAlias = keystoreProperties["keyAlias"].toString()
+            keyPassword = keystoreProperties["keyPassword"].toString()
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.getByName("release")
+        }
+        debug {
+            applicationIdSuffix = ".debug"
         }
     }
     buildFeatures {
@@ -76,6 +100,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test.junit4)
+
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
+    debugImplementation(libs.leakcanary)
 }
