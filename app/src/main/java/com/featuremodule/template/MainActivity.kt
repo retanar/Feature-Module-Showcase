@@ -15,7 +15,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // Should go immediately after onCreate
-        installSplashScreen()
+        val splash = installSplashScreen()
+        splash.setKeepOnScreenCondition {
+            true
+        }
 
         // Status and navigation bars can be adjusted here
         enableEdgeToEdge()
