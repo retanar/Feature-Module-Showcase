@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.FeatureModuleTemplate.SplashTheme" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/Theme.FeatureModuleTemplate</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/animated_splash</item>
+        <item name="windowSplashScreenAnimationDuration">2000</item>
+    </style>
+</resources>

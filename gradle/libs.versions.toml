@@ -3,6 +3,7 @@ agp = "8.3.2"
 kotlin = "1.9.23"
 ksp = "1.9.23-1.0.19" # Should match kotlin version
 core-ktx = "1.13.0"
+splashscreen = "1.0.1"
 junit = "4.13.2"
 junit-androidx = "1.1.5"
 espresso-core = "3.5.1"
@@ -38,6 +39,7 @@ ktlint-plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref =
 ktlint-compose-rules = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlint-compose-rules" }
 
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
