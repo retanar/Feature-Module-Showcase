@@ -8,16 +8,20 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.featuremodule.core.ui.theme.AppTheme
 import com.featuremodule.template.ui.AppContent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val isLoaded = MutableStateFlow(false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Should go before onCreate
+        val splash = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        // Should go immediately after onCreate
-        val splash = installSplashScreen()
         splash.setKeepOnScreenCondition {
-            true
+            // Remove splash when viewmodel "loads"
+            !isLoaded.value
         }
 
         // Status and navigation bars can be adjusted here
@@ -25,7 +29,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AppTheme {
-                AppContent()
+                AppContent(updateLoadedState = { isLoaded.value = it })
             }
         }
     }

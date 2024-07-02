@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.SharedFlow
 
 internal data class State(
     val commands: SharedFlow<NavCommand>,
+    val isLoaded: Boolean = false,
 ) : UiState
 
 internal sealed interface Event : UiEvent {
