@@ -8,7 +8,7 @@ Template project for starting android development.
 
 Splash screen
 
-![](readme_res/splash_screen_20240703.gif)
+<img src="readme_res/splash_screen_20240703.gif" width="480"/>
 
 ### Quick overview
 
