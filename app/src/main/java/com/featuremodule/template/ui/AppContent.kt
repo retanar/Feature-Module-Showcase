@@ -29,7 +29,7 @@ internal fun AppContent(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(state.isLoaded) {
+    LaunchedEffect(state.isLoaded, updateLoadedState) {
         updateLoadedState(state.isLoaded)
     }
 

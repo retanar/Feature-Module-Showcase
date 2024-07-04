@@ -45,38 +45,48 @@ class MainActivity : ComponentActivity() {
         }
 
         splash.setOnExitAnimationListener { splashScreenView ->
-            val rotateAnimator = AnimatorSet().apply {
+            val scaleAnimator = AnimatorSet().apply {
                 playTogether(
                     ObjectAnimator.ofFloat(
                         splashScreenView.view,
                         View.SCALE_X,
-                        1f,
-                        100f,
+                        SPLASH_SCALE_FROM,
+                        SPLASH_SCALE_TO,
                     ),
                     ObjectAnimator.ofFloat(
                         splashScreenView.view,
                         View.SCALE_Y,
-                        1f,
-                        100f,
+                        SPLASH_SCALE_FROM,
+                        SPLASH_SCALE_TO,
                     ),
                 )
-                duration = 400
+                duration = SPLASH_SCALE_LENGTH
                 interpolator = AccelerateInterpolator()
             }
             val alphaAnimator = ObjectAnimator.ofFloat(
                 splashScreenView.view,
                 View.ALPHA,
-                1f,
-                0f,
+                SPLASH_ALPHA_FROM,
+                SPLASH_ALPHA_TO,
             ).apply {
-                duration = 200
+                duration = SPLASH_ALPHA_LENGTH
                 interpolator = AccelerateInterpolator()
                 doOnEnd { splashScreenView.remove() }
             }
 
             // was easier to set it like that instead of building single Animator
-            rotateAnimator.doOnEnd { alphaAnimator.start() }
-            rotateAnimator.start()
+            scaleAnimator.doOnEnd { alphaAnimator.start() }
+            scaleAnimator.start()
         }
+    }
+
+    companion object {
+        // Scale and lengths were picked by eye and feel, can be adjusted as needed
+        private const val SPLASH_SCALE_FROM = 1f
+        private const val SPLASH_SCALE_TO = 50f
+        private const val SPLASH_SCALE_LENGTH = 350L
+        private const val SPLASH_ALPHA_FROM = 1f
+        private const val SPLASH_ALPHA_TO = 0f
+        private const val SPLASH_ALPHA_LENGTH = 200L
     }
 }
