@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,11 +20,18 @@ import com.featuremodule.core.navigation.NavCommand
 import com.featuremodule.core.util.CollectWithLifecycle
 
 @Composable
-internal fun AppContent(viewModel: MainVM = hiltViewModel()) {
+internal fun AppContent(
+    viewModel: MainVM = hiltViewModel(),
+    updateLoadedState: (isLoaded: Boolean) -> Unit,
+) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(state.isLoaded, updateLoadedState) {
+        updateLoadedState(state.isLoaded)
+    }
 
     state.commands.CollectWithLifecycle {
         navController.handleCommand(it)

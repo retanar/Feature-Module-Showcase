@@ -10,6 +10,13 @@ import javax.inject.Inject
 internal class MainVM @Inject constructor(
     private val navManager: NavManager,
 ) : BaseVM<State, Event>() {
+    init {
+        launch {
+            // Do something useful before loading
+            setState { copy(isLoaded = true) }
+        }
+    }
+
     override fun initialState() = State(navManager.commands)
 
     override fun handleEvent(event: Event) {

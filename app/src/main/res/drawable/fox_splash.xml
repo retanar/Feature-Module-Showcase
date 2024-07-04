@@ -1,0 +1,19 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="vector"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- 0.35 adds necessary padding to fit in a circle which clips this icon and to look okay -->
+    <group
+        android:name="fox"
+        android:pivotX="12"
+        android:pivotY="12"
+        android:scaleX="0.35"
+        android:scaleY="0.35">
+        <path
+            android:fillColor="@color/purple_200"
+            android:pathData="M23,0a5.9,5.9 0,0 0,-5.6 3.782A21.868,21.868 0,0 0,12 3a21.876,21.876 0,0 0,-5.4 0.782A5.9,5.9 0,0 0,1 0L0,0L0,11.929a5.959,5.959 0,0 0,1.757 4.242l6.95,6.95A2.978,2.978 0,0 0,10.829 24h2.343a2.978,2.978 0,0 0,2.121 -0.879l6.949,-6.949A5.958,5.958 0,0 0,24 11.929L24,0ZM9,20.586 L3.171,14.757A3.974,3.974 0,0 1,2 11.929L2,10.215a11.361,11.361 0,0 1,2 0.722,3.808 3.808,0 0,0 3.624,3.05A8.917,8.917 0,0 1,9 19ZM22,11.929a3.969,3.969 0,0 1,-1.172 2.828L15,20.586L15,19a8.917,8.917 0,0 1,1.376 -5.013A3.808,3.808 0,0 0,20 10.937a11.361,11.361 0,0 1,2 -0.722ZM22,8.173c-2.431,0.559 -9,2.815 -9,10.827v1L11,20L11,19C11,10.987 4.431,8.732 2,8.173L2,2.109A4.325,4.325 0,0 1,5.051 5.316l0.317,0.948 0.947,-0.315A20.924,20.924 0,0 1,12 5a20.934,20.934 0,0 1,5.685 0.949l0.948,0.315 0.315,-0.948A4.328,4.328 0,0 1,22 2.109Z" />
+    </group>
+</vector>

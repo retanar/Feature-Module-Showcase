@@ -6,6 +6,10 @@ Template project for starting android development.
 
 ![](readme_res/app_recording_20240423.gif)
 
+Splash screen
+
+<img src="readme_res/splash_screen_20240703.gif" width="480"/>
+
 ### Quick overview
 
 | Feature      | Short description  |
@@ -94,3 +98,9 @@ Source: [RenamePackageTask.kt](buildSrc/src/main/kotlin/RenamePackageTask.kt). E
 ```
 
 Configuration for all custom tasks can be found in root [build.gradle.kts](build.gradle.kts).
+
+### Attribution
+
+Fox vector icon is
+made <a href="https://www.freepik.com/icon/fox_5527855#fromView=families&page=1&position=0&uuid=d4704c42-f6e5-4749-9646-a39d0bf310b2">
+by UIcons</a>
