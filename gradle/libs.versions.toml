@@ -1,7 +1,7 @@
 [versions]
 agp = "8.3.2"
-kotlin = "1.9.23"
-ksp = "1.9.23-1.0.19" # Should match kotlin version
+kotlin = "1.9.24"
+ksp = "1.9.24-1.0.20" # Should match kotlin version
 core-ktx = "1.13.0"
 splashscreen = "1.0.1"
 junit = "4.13.2"
@@ -27,7 +27,7 @@ leakcanary = "2.14"
 sdk-compile = "34"
 sdk-min = "26"
 jvm-toolchain = "17"
-compose-compiler = "1.5.12"
+compose-compiler = "1.5.14"
 
 [libraries]
 android-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
