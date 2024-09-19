@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.ksp.plugin)
     implementation(libs.detekt.plugin)
     implementation(libs.ktlint.plugin)
+    implementation(libs.google.services.plugin)
 
     // Workaround to use Hilt with proper javapoet version
     // Refer to https://github.com/google/dagger/issues/3068#issuecomment-999118496
