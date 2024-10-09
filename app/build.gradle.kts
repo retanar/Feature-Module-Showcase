@@ -5,6 +5,7 @@ plugins {
     id(libs.plugins.kotlin.android.get().pluginId)
     id(libs.plugins.hilt.android.get().pluginId)
     id(libs.plugins.ksp.get().pluginId)
+    id(libs.plugins.google.services.get().pluginId)
     id(libs.plugins.convention.linters.get().pluginId)
 }
 
@@ -95,6 +96,9 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
     ksp(libs.hilt.compiler)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.common)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

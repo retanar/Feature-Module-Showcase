@@ -1,6 +1,5 @@
 plugins {
     id(libs.plugins.convention.feature.module.get().pluginId)
-    id(libs.plugins.google.services.get().pluginId)
 }
 
 android {

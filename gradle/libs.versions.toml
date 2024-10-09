@@ -72,6 +72,7 @@ moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", ver
 glide-compose = { module = "com.github.bumptech.glide:compose", version.ref = "glide-compose" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+firebase-common = { module = "com.google.firebase:firebase-common" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 
 # Testing
