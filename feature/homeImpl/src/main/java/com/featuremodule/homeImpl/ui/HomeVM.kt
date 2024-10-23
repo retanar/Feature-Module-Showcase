@@ -5,6 +5,7 @@ import com.featuremodule.core.navigation.NavCommand
 import com.featuremodule.core.navigation.NavManager
 import com.featuremodule.core.ui.BaseVM
 import com.featuremodule.featureAApi.FeatureADestination
+import com.featuremodule.homeImpl.InternalRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.random.Random
@@ -24,6 +25,12 @@ internal class HomeVM @Inject constructor(
 
                 navManager.navigate(
                     NavCommand.Forward(FeatureADestination.constructRoute(randomInt)),
+                )
+            }
+
+            Event.NavigateToExoplayer -> launch {
+                navManager.navigate(
+                    NavCommand.Forward(InternalRoutes.ExoplayerDestination.constructRoute()),
                 )
             }
         }

@@ -9,4 +9,6 @@ android {
 dependencies {
     implementation(projects.feature.homeApi)
     implementation(projects.feature.featureAApi)
+
+    implementation(libs.bundles.exoplayer)
 }
