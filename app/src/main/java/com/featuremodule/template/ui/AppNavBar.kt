@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import com.featuremodule.core.navigation.HIDE_NAV_BAR
 import com.featuremodule.core.navigation.NavBarItems
 
 /**
@@ -24,6 +25,8 @@ internal fun AppNavBar(
     openNavBarRoute: (route: String, isSelected: Boolean) -> Unit,
     currentDestination: NavDestination?,
 ) {
+    if (currentDestination?.route.orEmpty().contains(HIDE_NAV_BAR)) return
+
     NavigationBar {
         NavBarItems.entries.forEach { item ->
             val isSelected = currentDestination?.hierarchy
