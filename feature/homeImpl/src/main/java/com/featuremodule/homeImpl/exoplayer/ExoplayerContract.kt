@@ -6,7 +6,10 @@ import com.featuremodule.core.ui.UiState
 
 internal data class State(
     val exoplayer: ExoPlayer,
+    val showPlayButton: Boolean = false,
+    val title: String = "",
 ) : UiState
 
 internal sealed interface Event : UiEvent {
+    data object OnPlayPauseClick : Event
 }
