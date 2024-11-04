@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -29,9 +30,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
@@ -71,6 +76,7 @@ internal fun ExoplayerScreen(viewModel: ExoplayerVM = hiltViewModel()) {
     }
 
     var overlayVisibility by rememberSaveable { mutableStateOf(false) }
+    var videoSize by remember { mutableStateOf(IntSize(0, 0)) }
 
     Box(
         modifier = Modifier
@@ -88,13 +94,16 @@ internal fun ExoplayerScreen(viewModel: ExoplayerVM = hiltViewModel()) {
         AndroidView(
             factory = { viewContext ->
                 PlayerView(viewContext).apply {
-                    player = exoplayer
                     useController = false
-
                     setShowBuffering(PlayerView.SHOW_BUFFERING_ALWAYS)
                     background = context.getDrawable(android.R.color.black)
                     resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+
+                    player = exoplayer
                 }
+            },
+            modifier = Modifier.onSizeChanged { intSize ->
+                videoSize = intSize
             },
         )
 
@@ -103,7 +112,14 @@ internal fun ExoplayerScreen(viewModel: ExoplayerVM = hiltViewModel()) {
             isVisible = overlayVisibility,
             showPlayButton = state.showPlayButton,
             onPlayPauseClick = { viewModel.postEvent(Event.OnPlayPauseClick) },
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.size(
+                with(LocalDensity.current) {
+                    DpSize(
+                        width = videoSize.width.toDp(),
+                        height = videoSize.height.toDp(),
+                    )
+                },
+            ),
         )
     }
 }
