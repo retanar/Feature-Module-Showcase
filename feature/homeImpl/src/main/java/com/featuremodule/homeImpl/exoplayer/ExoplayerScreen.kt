@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -49,6 +50,7 @@ import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import com.featuremodule.core.util.getActivity
 import com.featuremodule.homeImpl.R
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(UnstableApi::class)
 @Composable
@@ -75,7 +77,7 @@ internal fun ExoplayerScreen(viewModel: ExoplayerVM = hiltViewModel()) {
         }
     }
 
-    var overlayVisibility by rememberSaveable { mutableStateOf(false) }
+    var overlayVisibility by rememberSaveable { mutableStateOf(true) }
     var videoSize by remember { mutableStateOf(IntSize(0, 0)) }
 
     Box(
@@ -108,9 +110,8 @@ internal fun ExoplayerScreen(viewModel: ExoplayerVM = hiltViewModel()) {
         )
 
         Overlay(
-            title = state.title,
+            state = state.overlayState,
             isVisible = overlayVisibility,
-            showPlayButton = state.showPlayButton,
             onPlayPauseClick = { viewModel.postEvent(Event.OnPlayPauseClick) },
             modifier = Modifier.size(
                 with(LocalDensity.current) {
@@ -126,9 +127,8 @@ internal fun ExoplayerScreen(viewModel: ExoplayerVM = hiltViewModel()) {
 
 @Composable
 private fun Overlay(
-    title: String,
+    state: OverlayState,
     isVisible: Boolean,
-    showPlayButton: Boolean,
     onPlayPauseClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -148,7 +148,7 @@ private fun Overlay(
                     .height(48.dp),
             ) {
                 Text(
-                    text = title,
+                    text = state.title,
                     color = Color.White,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(8.dp),
@@ -165,7 +165,7 @@ private fun Overlay(
                         contentColor = Color.White,
                     ),
                 ) {
-                    if (showPlayButton) {
+                    if (state.showPlayButton) {
                         Icon(painterResource(id = R.drawable.play), contentDescription = null)
                     } else {
                         Icon(painterResource(id = R.drawable.pause), contentDescription = null)
@@ -179,7 +179,12 @@ private fun Overlay(
                     .fillMaxWidth()
                     .height(48.dp),
             ) {
-
+                Slider(
+                    value = state.contentPosition.toFloat(),
+                    onValueChange = { /*TODO*/ },
+                    valueRange = 0f..state.contentDuration.toFloat(),
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         }
     }
