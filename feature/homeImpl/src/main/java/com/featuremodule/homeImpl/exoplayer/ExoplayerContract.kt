@@ -18,4 +18,5 @@ internal data class OverlayState(
 
 internal sealed interface Event : UiEvent {
     data object OnPlayPauseClick : Event
+    data class OnSeekFinished(val position: Long) : Event
 }

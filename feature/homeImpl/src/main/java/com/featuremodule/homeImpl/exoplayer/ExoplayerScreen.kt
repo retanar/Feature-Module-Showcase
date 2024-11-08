@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -113,6 +115,7 @@ internal fun ExoplayerScreen(viewModel: ExoplayerVM = hiltViewModel()) {
             state = state.overlayState,
             isVisible = overlayVisibility,
             onPlayPauseClick = { viewModel.postEvent(Event.OnPlayPauseClick) },
+            onSeek = { viewModel.postEvent(Event.OnSeekFinished(it)) },
             modifier = Modifier.size(
                 with(LocalDensity.current) {
                     DpSize(
@@ -130,6 +133,7 @@ private fun Overlay(
     state: OverlayState,
     isVisible: Boolean,
     onPlayPauseClick: () -> Unit,
+    onSeek: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AnimatedVisibility(
@@ -177,15 +181,50 @@ private fun Overlay(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
+                    .height(40.dp)
+                    .padding(top = 8.dp, start = 8.dp, end = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
+                var isValueChanging by remember { mutableStateOf(false) }
+                var seekPosition by remember { mutableFloatStateOf(0f) }
+
+                Text(
+                    text = "${formatMs(state.contentPosition)}/${formatMs(state.contentDuration)}",
+                    color = Color.White,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(end = 8.dp),
+                )
+
                 Slider(
-                    value = state.contentPosition.toFloat(),
-                    onValueChange = { /*TODO*/ },
+                    value = if (isValueChanging) {
+                        seekPosition
+                    } else {
+                        state.contentPosition.toFloat()
+                    },
+                    onValueChange = {
+                        seekPosition = it
+                        isValueChanging = true
+                    },
                     valueRange = 0f..state.contentDuration.toFloat(),
                     modifier = Modifier.fillMaxWidth(),
+                    onValueChangeFinished = {
+                        onSeek(seekPosition.toLong())
+                        isValueChanging = false
+                    },
                 )
             }
+        }
+    }
+}
+
+fun formatMs(ms: Long): String {
+    return ms.milliseconds.toComponents { hours, minutes, seconds, _ ->
+        val secondsString = "%02d".format(seconds)
+        if (hours == 0L) {
+            "$minutes:$secondsString"
+        } else {
+            val minutesString = "%02d".format(minutes)
+            "$hours:$minutesString:$secondsString"
         }
     }
 }

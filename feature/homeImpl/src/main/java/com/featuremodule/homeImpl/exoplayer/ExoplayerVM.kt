@@ -2,10 +2,13 @@ package com.featuremodule.homeImpl.exoplayer
 
 import android.content.ContentResolver
 import android.net.Uri
+import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.SeekParameters
 import com.featuremodule.core.ui.BaseVM
 import com.featuremodule.homeImpl.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import javax.inject.Inject
 
+@OptIn(UnstableApi::class)
 @HiltViewModel
 internal class ExoplayerVM @Inject constructor(
     private val exoplayer: ExoPlayer,
@@ -47,7 +51,6 @@ internal class ExoplayerVM @Inject constructor(
                 }
             }
 
-
             setState { copy(overlayState = updatedState) }
         }
     }
@@ -62,6 +65,8 @@ internal class ExoplayerVM @Inject constructor(
                         .build(),
                 ),
             )
+            // Slow but exact, can be adjusted if needed
+            setSeekParameters(SeekParameters.EXACT)
             prepare()
             playWhenReady = true
 
@@ -83,7 +88,7 @@ internal class ExoplayerVM @Inject constructor(
                     )
                     copy(overlayState = newOverlay)
                 }
-                delay(PROGRESS_UPDATE_DELAY_MS)
+                delay(1000L - exoplayer.currentPosition % 1000L)
             }
         }
     }
@@ -104,15 +109,18 @@ internal class ExoplayerVM @Inject constructor(
             Event.OnPlayPauseClick -> {
                 Util.handlePlayPauseButtonAction(exoplayer)
             }
+
+            is Event.OnSeekFinished -> onSeek(event.position)
         }
+    }
+
+    private fun onSeek(position: Long) {
+        exoplayer.seekTo(position)
+        setState { copy(overlayState = overlayState.copy(contentPosition = position)) }
     }
 
     override fun onCleared() {
         exoplayer.removeListener(playerEventListener)
         exoplayer.release()
-    }
-
-    companion object {
-        const val PROGRESS_UPDATE_DELAY_MS = 500L
     }
 }
