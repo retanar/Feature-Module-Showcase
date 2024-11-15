@@ -74,6 +74,7 @@ internal class ExoplayerVM @Inject constructor(
         }
     }
 
+    @Suppress("MagicNumber")
     @Synchronized
     private fun startProgressUpdateJob() {
         // if job is null, this will not trigger too

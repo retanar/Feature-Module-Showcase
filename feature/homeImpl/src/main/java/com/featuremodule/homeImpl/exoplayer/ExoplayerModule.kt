@@ -14,6 +14,5 @@ import dagger.hilt.android.scopes.ViewModelScoped
 class ExoplayerModule {
     @ViewModelScoped
     @Provides
-    fun provideExoplayer(@ApplicationContext context: Context) =
-        ExoPlayer.Builder(context).build()
+    fun provideExoplayer(@ApplicationContext context: Context) = ExoPlayer.Builder(context).build()
 }
