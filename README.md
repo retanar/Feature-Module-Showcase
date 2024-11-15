@@ -10,6 +10,10 @@ Splash screen
 
 <img src="readme_res/splash_screen_20240703.gif" width="480"/>
 
+Exoplayer video playback
+
+![exoplayer](readme_res/exoplayer_20241115.gif)
+
 ### Quick overview
 
 | Feature      | Short description  |

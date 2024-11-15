@@ -7,4 +7,5 @@ internal data object State : UiState
 
 internal sealed interface Event : UiEvent {
     data object NavigateToFeatureA : Event
+    data object NavigateToExoplayer : Event
 }
