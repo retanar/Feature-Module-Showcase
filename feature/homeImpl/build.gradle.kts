@@ -11,4 +11,6 @@ dependencies {
     implementation(projects.feature.featureAApi)
 
     implementation(libs.bundles.exoplayer)
+
+    implementation(libs.glide.compose)
 }
