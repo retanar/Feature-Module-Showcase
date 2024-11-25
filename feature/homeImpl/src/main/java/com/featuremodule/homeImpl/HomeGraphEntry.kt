@@ -41,7 +41,7 @@ internal class InternalRoutes {
     }
 
     object TakePhotoDestination {
-        const val ROUTE = "take_photo"
+        const val ROUTE = HIDE_NAV_BAR + "take_photo"
 
         fun constructRoute() = ROUTE
     }

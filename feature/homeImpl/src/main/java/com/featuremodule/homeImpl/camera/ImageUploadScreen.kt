@@ -1,8 +1,11 @@
 package com.featuremodule.homeImpl.camera
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.TakePicturePreview
 import androidx.activity.result.launch
 import androidx.compose.foundation.layout.Box
@@ -19,47 +22,81 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 internal fun ImageUploadScreen(viewModel: ImageUploadVM = hiltViewModel()) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val launchPhoto = rememberLauncherForActivityResult(TakePicturePreview()) { bitmap ->
+    val launchSystemPhotoTaker = rememberLauncherForActivityResult(TakePicturePreview()) { bitmap ->
         bitmap?.let { viewModel.postEvent(Event.PhotoTaken(it)) }
     }
     val launchImagePicker = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
         uri?.let { viewModel.postEvent(Event.ImagePicked(it)) }
     }
+    val launchCameraPermissionRequest =
+        rememberLauncherForActivityResult(RequestPermission()) { isGranted ->
+            if (isGranted) {
+                viewModel.postEvent(Event.OpenInAppCamera)
+            } else {
+                // TODO("Show dialog for refused request")
+            }
+        }
 
+    ImageUploadScreen(
+        state = state,
+        launchPhotoTaker = { launchSystemPhotoTaker.launch() },
+        launchImagePicker = {
+            launchImagePicker.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+        },
+        launchCamera = {
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.CAMERA,
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
+                launchCameraPermissionRequest.launch(Manifest.permission.CAMERA)
+            } else {
+                viewModel.postEvent(Event.OpenInAppCamera)
+            }
+        },
+    )
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+private fun ImageUploadScreen(
+    state: State,
+    launchPhotoTaker: () -> Unit,
+    launchImagePicker: () -> Unit,
+    launchCamera: () -> Unit,
+) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(
-            modifier = Modifier.width(200.dp),
-        ) {
+        Column(modifier = Modifier.width(200.dp)) {
             GlideImage(
                 model = state.image,
                 contentDescription = null,
                 modifier = Modifier.size(200.dp),
             )
 
-            Button(
-                onClick = { launchPhoto.launch() },
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(text = "Open camera app")
+            @Composable
+            fun GenericButton(text: String, onClick: () -> Unit) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onClick,
+                ) {
+                    Text(text = text)
+                }
             }
 
-            Button(
-                onClick = { launchImagePicker.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly)) },
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(text = "Open image picker")
-            }
+            GenericButton(text = "Open camera app") { launchPhotoTaker() }
+            GenericButton(text = "Open image picker") { launchImagePicker() }
+            GenericButton(text = "Open custom camera") { launchCamera() }
         }
     }
 }

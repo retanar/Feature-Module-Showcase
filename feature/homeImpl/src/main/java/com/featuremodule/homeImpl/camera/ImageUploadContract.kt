@@ -12,4 +12,5 @@ internal data class State(
 internal sealed interface Event : UiEvent {
     data class PhotoTaken(val bitmap: Bitmap) : Event
     data class ImagePicked(val uri: Uri) : Event
+    data object OpenInAppCamera : Event
 }
