@@ -1,4 +1,4 @@
-package com.featuremodule.homeImpl.camera
+package com.featuremodule.homeImpl.imageUpload
 
 import com.featuremodule.core.navigation.NavCommand
 import com.featuremodule.core.navigation.NavManager

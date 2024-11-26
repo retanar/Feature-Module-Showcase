@@ -1,4 +1,4 @@
-package com.featuremodule.homeImpl.camera
+package com.featuremodule.homeImpl.imageUpload
 
 import android.Manifest
 import android.content.pm.PackageManager

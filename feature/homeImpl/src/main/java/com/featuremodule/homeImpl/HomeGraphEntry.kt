@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.featuremodule.core.navigation.HIDE_NAV_BAR
 import com.featuremodule.homeApi.HomeDestination
-import com.featuremodule.homeImpl.camera.ImageUploadScreen
+import com.featuremodule.homeImpl.imageUpload.ImageUploadScreen
 import com.featuremodule.homeImpl.camera.TakePhotoScreen
 import com.featuremodule.homeImpl.exoplayer.ExoplayerScreen
 import com.featuremodule.homeImpl.ui.HomeScreen
