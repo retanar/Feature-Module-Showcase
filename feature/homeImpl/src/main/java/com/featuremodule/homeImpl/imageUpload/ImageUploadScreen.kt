@@ -2,6 +2,7 @@ package com.featuremodule.homeImpl.imageUpload
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +31,10 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
 @Composable
-internal fun ImageUploadScreen(viewModel: ImageUploadVM = hiltViewModel()) {
+internal fun ImageUploadScreen(
+    returnedBitmap: Bitmap?,
+    viewModel: ImageUploadVM = hiltViewModel()
+) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -47,6 +52,12 @@ internal fun ImageUploadScreen(viewModel: ImageUploadVM = hiltViewModel()) {
                 // TODO("Show dialog for refused request")
             }
         }
+
+    LaunchedEffect(returnedBitmap) {
+        returnedBitmap?.let {
+            viewModel.postEvent(Event.PhotoTaken(it))
+        }
+    }
 
     ImageUploadScreen(
         state = state,
