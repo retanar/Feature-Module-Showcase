@@ -7,5 +7,5 @@ import com.featuremodule.core.ui.UiState
 internal class State : UiState
 
 internal sealed interface Event : UiEvent {
-    data class CaptureSuccess(val bitmap: Bitmap) : Event
+    data class CaptureSuccess(val bitmap: Bitmap, val rotation: Int) : Event
 }
