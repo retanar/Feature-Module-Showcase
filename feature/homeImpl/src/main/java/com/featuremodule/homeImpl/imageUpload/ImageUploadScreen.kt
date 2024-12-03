@@ -54,13 +54,25 @@ internal fun ImageUploadScreen(
     var permissionNotGrantedVisibility by remember { mutableStateOf(false) }
     var cameraNotFoundVisibility by remember { mutableStateOf(false) }
 
-    val launchSystemPhotoTaker = rememberLauncherForActivityResult(TakePicturePreview()) { bitmap ->
+    val launchSystemCamera = rememberLauncherForActivityResult(TakePicturePreview()) { bitmap ->
         bitmap?.let { viewModel.postEvent(Event.PhotoTaken(it)) }
     }
+    val launchSystemCameraPermissionRequest =
+        rememberLauncherForActivityResult(RequestPermission()) { isGranted ->
+            if (isGranted) {
+                try {
+                    launchSystemCamera.launch()
+                } catch (e: ActivityNotFoundException) {
+                    cameraNotFoundVisibility = true
+                }
+            } else {
+                permissionNotGrantedVisibility = true
+            }
+        }
     val launchImagePicker = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
         uri?.let { viewModel.postEvent(Event.ImagePicked(it)) }
     }
-    val launchCameraPermissionRequest =
+    val launchInAppCameraPermissionRequest =
         rememberLauncherForActivityResult(RequestPermission()) { isGranted ->
             if (isGranted) {
                 viewModel.postEvent(Event.OpenInAppCamera)
@@ -78,16 +90,16 @@ internal fun ImageUploadScreen(
     Box {
         ImageUploadScreen(
             state = state,
-            launchPhotoTaker = {
+            launchSystemCamera = {
                 if (ContextCompat.checkSelfPermission(
                         context,
                         Manifest.permission.CAMERA,
                     ) == PackageManager.PERMISSION_DENIED
                 ) {
-                    launchCameraPermissionRequest.launch(Manifest.permission.CAMERA)
+                    launchSystemCameraPermissionRequest.launch(Manifest.permission.CAMERA)
                 } else {
                     try {
-                        launchSystemPhotoTaker.launch()
+                        launchSystemCamera.launch()
                     } catch (e: ActivityNotFoundException) {
                         cameraNotFoundVisibility = true
                     }
@@ -102,7 +114,7 @@ internal fun ImageUploadScreen(
                         Manifest.permission.CAMERA,
                     ) == PackageManager.PERMISSION_DENIED
                 ) {
-                    launchCameraPermissionRequest.launch(Manifest.permission.CAMERA)
+                    launchInAppCameraPermissionRequest.launch(Manifest.permission.CAMERA)
                 } else {
                     viewModel.postEvent(Event.OpenInAppCamera)
                 }
@@ -125,7 +137,7 @@ internal fun ImageUploadScreen(
 @Composable
 private fun ImageUploadScreen(
     state: State,
-    launchPhotoTaker: () -> Unit,
+    launchSystemCamera: () -> Unit,
     launchImagePicker: () -> Unit,
     launchCamera: () -> Unit,
 ) {
@@ -157,7 +169,7 @@ private fun ImageUploadScreen(
                 }
             }
 
-            GenericButton(text = "Open camera app") { launchPhotoTaker() }
+            GenericButton(text = "Open camera app") { launchSystemCamera() }
             GenericButton(text = "Open image picker") { launchImagePicker() }
             GenericButton(text = "Open in-app camera") { launchCamera() }
         }

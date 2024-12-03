@@ -68,20 +68,22 @@ internal fun TakePhotoScreen(viewModel: TakePhotoVM = hiltViewModel()) {
 
         IconButton(
             onClick = {
-                cameraController.takePicture(
-                    ContextCompat.getMainExecutor(context),
-                    object : OnImageCapturedCallback() {
-                        override fun onCaptureSuccess(image: ImageProxy) {
-                            viewModel.postEvent(
-                                Event.CaptureSuccess(
-                                    image.toBitmap(),
-                                    image.imageInfo.rotationDegrees,
-                                ),
-                            )
-                            image.close()
-                        }
-                    },
-                )
+                runCatching {
+                    cameraController.takePicture(
+                        ContextCompat.getMainExecutor(context),
+                        object : OnImageCapturedCallback() {
+                            override fun onCaptureSuccess(image: ImageProxy) {
+                                viewModel.postEvent(
+                                    Event.CaptureSuccess(
+                                        image.toBitmap(),
+                                        image.imageInfo.rotationDegrees,
+                                    ),
+                                )
+                                image.close()
+                            }
+                        },
+                    )
+                }
             },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
