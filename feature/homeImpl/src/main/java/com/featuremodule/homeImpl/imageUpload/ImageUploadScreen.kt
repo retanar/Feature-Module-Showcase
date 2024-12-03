@@ -44,10 +44,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
+@Suppress("LongMethod")
 @Composable
 internal fun ImageUploadScreen(
     returnedBitmap: Bitmap?,
-    viewModel: ImageUploadVM = hiltViewModel()
+    viewModel: ImageUploadVM = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -62,7 +63,7 @@ internal fun ImageUploadScreen(
             if (isGranted) {
                 try {
                     launchSystemCamera.launch()
-                } catch (e: ActivityNotFoundException) {
+                } catch (_: ActivityNotFoundException) {
                     cameraNotFoundVisibility = true
                 }
             } else {
@@ -100,7 +101,7 @@ internal fun ImageUploadScreen(
                 } else {
                     try {
                         launchSystemCamera.launch()
-                    } catch (e: ActivityNotFoundException) {
+                    } catch (_: ActivityNotFoundException) {
                         cameraNotFoundVisibility = true
                     }
                 }
