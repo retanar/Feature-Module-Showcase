@@ -33,6 +33,12 @@ internal class HomeVM @Inject constructor(
                     NavCommand.Forward(InternalRoutes.ExoplayerDestination.constructRoute()),
                 )
             }
+
+            Event.NavigateToCamera -> launch {
+                navManager.navigate(
+                    NavCommand.Forward(InternalRoutes.ImageUploadDestination.constructRoute()),
+                )
+            }
         }
     }
 }
