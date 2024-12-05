@@ -68,8 +68,8 @@ private fun NavHostController.handleCommand(command: NavCommand) {
         is NavCommand.PopBackWithArguments<*> -> {
             command.args.forEach { (key, value) ->
                 previousBackStackEntry?.savedStateHandle?.set(key, value)
-                popBackStack()
             }
+            popBackStack()
         }
 
         is NavCommand.OpenNavBarRoute -> {
