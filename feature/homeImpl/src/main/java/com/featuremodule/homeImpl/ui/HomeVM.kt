@@ -39,6 +39,12 @@ internal class HomeVM @Inject constructor(
                     NavCommand.Forward(InternalRoutes.ImageUploadDestination.constructRoute()),
                 )
             }
+
+            Event.NavigateToBarcode -> launch {
+                navManager.navigate(
+                    NavCommand.Forward(InternalRoutes.BarcodeCameraDestination.constructRoute()),
+                )
+            }
         }
     }
 }
