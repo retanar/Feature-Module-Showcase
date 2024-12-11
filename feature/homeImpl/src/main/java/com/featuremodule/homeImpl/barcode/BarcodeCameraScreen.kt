@@ -1,6 +1,7 @@
 package com.featuremodule.homeImpl.barcode
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,6 +32,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -50,53 +52,31 @@ internal fun BarcodeCameraScreen(viewModel: BarcodeVM = hiltViewModel()) {
             }
         }
 
-    LaunchedEffect(Unit) {
+    val cameraController = remember {
+        createCameraController(
+            context = context,
+            lifecycleOwner = lifecycleOwner,
+            onBarcodeReceived = { viewModel.postEvent(Event.BarcodeReceived(it)) },
+        )
+    }
+
+    val previewView = remember {
+        PreviewView(context).apply {
+            scaleType = PreviewView.ScaleType.FIT_CENTER
+            controller = cameraController
+        }
+    }
+
+    LaunchedEffect(context) {
         if (ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.CAMERA,
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             launchInAppCameraPermissionRequest.launch(Manifest.permission.CAMERA)
+        } else {
+            cameraViewVisibility = true
         }
-    }
-
-    val options = BarcodeScannerOptions.Builder()
-        .setBarcodeFormats(
-            Barcode.FORMAT_QR_CODE,
-            Barcode.FORMAT_DATA_MATRIX,
-            Barcode.FORMAT_EAN_13,
-            Barcode.FORMAT_EAN_8,
-        )
-        .build()
-    val barcodeScanner = BarcodeScanning.getClient(options)
-
-    val previewView = remember {
-        PreviewView(context).apply {
-            scaleType = PreviewView.ScaleType.FIT_CENTER
-        }
-    }
-    val cameraController = remember {
-        LifecycleCameraController(context).apply {
-            setEnabledUseCases(CameraController.IMAGE_ANALYSIS)
-            setImageAnalysisAnalyzer(
-                ContextCompat.getMainExecutor(context),
-                MlKitAnalyzer(
-                    listOf(barcodeScanner),
-                    ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED,
-                    ContextCompat.getMainExecutor(context),
-                ) { result ->
-                    result?.getValue(barcodeScanner)?.firstOrNull()?.let {
-                        viewModel.postEvent(Event.BarcodeReceived(it))
-                    }
-                },
-            )
-            bindToLifecycle(lifecycleOwner)
-            cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-        }
-    }
-
-    LaunchedEffect(previewView, cameraController) {
-        previewView.controller = cameraController
     }
 
     Box(
@@ -108,11 +88,47 @@ internal fun BarcodeCameraScreen(viewModel: BarcodeVM = hiltViewModel()) {
         if (cameraViewVisibility) {
             AndroidView(
                 factory = { previewView },
-                Modifier
+                modifier = Modifier
                     .align(Alignment.Center)
                     .aspectRatio(1f)
                     .fillMaxSize(),
             )
         }
+    }
+}
+
+private fun createCameraController(
+    context: Context,
+    lifecycleOwner: LifecycleOwner,
+    onBarcodeReceived: (Barcode) -> Unit,
+): LifecycleCameraController {
+    val barcodeScanner = BarcodeScanning.getClient(
+        BarcodeScannerOptions.Builder()
+            .setBarcodeFormats(
+                Barcode.FORMAT_QR_CODE,
+                Barcode.FORMAT_DATA_MATRIX,
+                Barcode.FORMAT_EAN_13,
+                Barcode.FORMAT_EAN_8,
+            )
+            .build(),
+    )
+
+    return LifecycleCameraController(context).apply {
+        bindToLifecycle(lifecycleOwner)
+        setEnabledUseCases(CameraController.IMAGE_ANALYSIS)
+        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+        setImageAnalysisAnalyzer(
+            ContextCompat.getMainExecutor(context),
+            MlKitAnalyzer(
+                listOf(barcodeScanner),
+                ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED,
+                ContextCompat.getMainExecutor(context),
+            ) { result ->
+                result?.getValue(barcodeScanner)?.firstOrNull()?.let {
+                    onBarcodeReceived(it)
+                }
+            },
+        )
     }
 }

@@ -44,7 +44,10 @@ fun NavGraphBuilder.registerHome() {
         InternalRoutes.BarcodeResultDestination.ROUTE,
         InternalRoutes.BarcodeResultDestination.arguments,
     ) {
-        BarcodeResultScreen()
+        val barcode = it.arguments
+            ?.getString(InternalRoutes.BarcodeResultDestination.ARG_BARCODE)
+            ?: "NONE"
+        BarcodeResultScreen(barcode)
     }
 }
 
