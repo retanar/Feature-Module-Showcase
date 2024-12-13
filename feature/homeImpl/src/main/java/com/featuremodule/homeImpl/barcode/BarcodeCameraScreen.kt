@@ -43,8 +43,10 @@ internal fun BarcodeCameraScreen(viewModel: BarcodeVM = hiltViewModel()) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
     var cameraViewVisibility by remember { mutableStateOf(false) }
-    val launchInAppCameraPermissionRequest =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+    val launchCameraPermissionRequest =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { isGranted ->
             if (isGranted) {
                 cameraViewVisibility = true
             } else {
@@ -73,7 +75,7 @@ internal fun BarcodeCameraScreen(viewModel: BarcodeVM = hiltViewModel()) {
                 Manifest.permission.CAMERA,
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            launchInAppCameraPermissionRequest.launch(Manifest.permission.CAMERA)
+            launchCameraPermissionRequest.launch(Manifest.permission.CAMERA)
         } else {
             cameraViewVisibility = true
         }

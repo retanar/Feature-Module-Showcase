@@ -33,7 +33,8 @@ internal class BarcodeVM @Inject constructor(
                     ),
                 )
 
-                delay(5000L)
+                // Throttle time, can be adjusted as needed
+                delay(timeMillis = 5000L)
                 isBarcodeProcessing.set(false)
             }
         }
