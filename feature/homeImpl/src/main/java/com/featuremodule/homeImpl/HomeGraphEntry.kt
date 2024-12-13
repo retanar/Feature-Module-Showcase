@@ -4,9 +4,13 @@ import android.graphics.Bitmap
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.featuremodule.core.navigation.HIDE_NAV_BAR
 import com.featuremodule.homeApi.HomeDestination
+import com.featuremodule.homeImpl.barcode.BarcodeCameraScreen
+import com.featuremodule.homeImpl.barcode.BarcodeResultScreen
 import com.featuremodule.homeImpl.camera.TakePhotoScreen
 import com.featuremodule.homeImpl.exoplayer.ExoplayerScreen
 import com.featuremodule.homeImpl.imageUpload.ImageUploadScreen
@@ -31,6 +35,20 @@ fun NavGraphBuilder.registerHome() {
     composable(InternalRoutes.TakePhotoDestination.ROUTE) {
         TakePhotoScreen()
     }
+
+    composable(InternalRoutes.BarcodeCameraDestination.ROUTE) {
+        BarcodeCameraScreen()
+    }
+
+    composable(
+        InternalRoutes.BarcodeResultDestination.ROUTE,
+        InternalRoutes.BarcodeResultDestination.arguments,
+    ) {
+        val barcode = it.arguments
+            ?.getString(InternalRoutes.BarcodeResultDestination.ARG_BARCODE)
+            ?: "NONE"
+        BarcodeResultScreen(barcode)
+    }
 }
 
 internal class InternalRoutes {
@@ -51,5 +69,22 @@ internal class InternalRoutes {
         const val ROUTE = HIDE_NAV_BAR + "take_photo"
 
         fun constructRoute() = ROUTE
+    }
+
+    object BarcodeCameraDestination {
+        const val ROUTE = HIDE_NAV_BAR + "barcode"
+
+        fun constructRoute() = ROUTE
+    }
+
+    object BarcodeResultDestination {
+        const val ARG_BARCODE = "barcode"
+        const val ROUTE = "barcode_result/{$ARG_BARCODE}"
+
+        val arguments = listOf(
+            navArgument(ARG_BARCODE) { type = NavType.StringType },
+        )
+
+        fun constructRoute(barcodeValue: String) = "barcode_result/$barcodeValue"
     }
 }

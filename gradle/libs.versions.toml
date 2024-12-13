@@ -24,6 +24,7 @@ glide-compose = "1.0.0-beta01"
 leakcanary = "2.14"
 media3 = "1.4.1"
 camerax = "1.4.0"
+gms-mlkit = "18.3.1"
 
 # Versions used for android{} setup
 sdk-compile = "34"
@@ -77,6 +78,8 @@ camerax-core = { module = "androidx.camera:camera-core", version.ref = "camerax"
 camerax-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
 camerax-view = { module = "androidx.camera:camera-view", version.ref = "camerax" }
 camerax-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
+camerax-mlkit = { module = "androidx.camera:camera-mlkit-vision", version.ref = "camerax" }
+gms-mlkit-barcode = { module = "com.google.android.gms:play-services-mlkit-barcode-scanning", version.ref = "gms-mlkit" }
 
 # Testing
 junit = { module = "junit:junit", version.ref = "junit" }

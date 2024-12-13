@@ -12,6 +12,8 @@ dependencies {
 
     implementation(libs.bundles.exoplayer)
     implementation(libs.bundles.camerax)
+    implementation(libs.camerax.mlkit)
+    implementation(libs.gms.mlkit.barcode)
 
     implementation(libs.glide.compose)
 }
