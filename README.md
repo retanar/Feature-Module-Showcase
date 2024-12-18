@@ -1,6 +1,14 @@
 # Feature module template project
 
-Template project for starting android development.
+Template project for starting android development. Although it grew to be more of a showcase of
+different feature implementations, most of which are contained on Home screen:
+
+- Passing navigation arguments forward.
+- Exoplayer implementation with custom controls overlay.
+- In-app camera implementation and passing photo back in navigation.
+- Barcode scanning with ML Kit.
+- Creating custom CompositionLocal for colors (partly shown on Feature tab).
+- SMS authentication with firebase in sms-authentication branch.
 
 ### Screenshots
 
