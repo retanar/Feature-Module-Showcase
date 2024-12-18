@@ -15,6 +15,7 @@ import com.featuremodule.homeImpl.camera.TakePhotoScreen
 import com.featuremodule.homeImpl.exoplayer.ExoplayerScreen
 import com.featuremodule.homeImpl.imageUpload.ImageUploadScreen
 import com.featuremodule.homeImpl.ui.HomeScreen
+import com.featuremodule.homeImpl.wifi.WifiScreen
 
 fun NavGraphBuilder.registerHome() {
     composable(HomeDestination.ROUTE) { backStackEntry ->
@@ -48,6 +49,10 @@ fun NavGraphBuilder.registerHome() {
             ?.getString(InternalRoutes.BarcodeResultDestination.ARG_BARCODE)
             ?: "NONE"
         BarcodeResultScreen(barcode)
+    }
+
+    composable(InternalRoutes.WifiDestination.ROUTE) {
+        WifiScreen()
     }
 }
 
@@ -86,5 +91,11 @@ internal class InternalRoutes {
         )
 
         fun constructRoute(barcodeValue: String) = "barcode_result/$barcodeValue"
+    }
+
+    object WifiDestination {
+        const val ROUTE = "wifi"
+
+        fun constructRoute() = ROUTE
     }
 }

@@ -10,4 +10,5 @@ internal sealed interface Event : UiEvent {
     data object NavigateToExoplayer : Event
     data object NavigateToCamera : Event
     data object NavigateToBarcode : Event
+    data object NavigateToWifi : Event
 }
