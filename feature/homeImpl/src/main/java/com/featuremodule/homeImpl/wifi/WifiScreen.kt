@@ -4,9 +4,16 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.net.Network
 import android.net.wifi.WifiManager
 import android.net.wifi.WifiManager.ScanResultsCallback
 import android.os.Build
+import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -34,6 +41,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 internal fun WifiScreen(viewModel: WifiVM = hiltViewModel()) {
     val context = LocalContext.current.applicationContext
     val wifiManager = remember { context.getSystemService(Context.WIFI_SERVICE) as WifiManager }
+    val connectivityManager =
+        remember { context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
     val isWifiEnabled by remember { mutableStateOf(wifiManager.isWifiEnabled) }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -83,6 +92,69 @@ internal fun WifiScreen(viewModel: WifiVM = hiltViewModel()) {
         }
     }
 
+    val launchAddWifi = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) { activityResult ->
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return@rememberLauncherForActivityResult
+
+        val result = activityResult.data
+            ?.getIntegerArrayListExtra(Settings.EXTRA_WIFI_NETWORK_RESULT_LIST)
+            .orEmpty()
+
+        Log.d(
+            "WIFI",
+            result.joinToString {
+                when (it) {
+                    Settings.ADD_WIFI_RESULT_SUCCESS -> "ADD_WIFI_RESULT_SUCCESS"
+                    Settings.ADD_WIFI_RESULT_ADD_OR_UPDATE_FAILED -> "ADD_WIFI_RESULT_ADD_OR_UPDATE_FAILED"
+                    Settings.ADD_WIFI_RESULT_ALREADY_EXISTS -> "ADD_WIFI_RESULT_ALREADY_EXISTS"
+                    else -> "OTHER"
+                }
+            },
+        )
+
+        if (result.any { it == Settings.ADD_WIFI_RESULT_SUCCESS || it == Settings.ADD_WIFI_RESULT_ALREADY_EXISTS }) {
+            wifiManager.addNetworkSuggestions(state.wifiSuggestions.orEmpty())
+        }
+        viewModel.postEvent(Event.ClearWifiEvents)
+    }
+
+    LaunchedEffect(state.wifiSuggestions) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@LaunchedEffect
+
+        val suggestions = state.wifiSuggestions
+        if (suggestions.isNullOrEmpty()) return@LaunchedEffect
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val bundle = Bundle().apply {
+                putParcelableArrayList(Settings.EXTRA_WIFI_NETWORK_LIST, suggestions)
+            }
+            launchAddWifi.launch(Intent(Settings.ACTION_WIFI_ADD_NETWORKS).putExtras(bundle))
+        } else {
+            // Requires only API Q (29)
+            wifiManager.addNetworkSuggestions(suggestions)
+            viewModel.postEvent(Event.ClearWifiEvents)
+        }
+    }
+
+    LaunchedEffect(state.wifiToConnect) {
+        if (state.wifiToConnect == null) return@LaunchedEffect
+
+        connectivityManager.requestNetwork(
+            state.wifiToConnect!!,
+            object : ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) {
+                    Log.d("WIFI", "onAvailable")
+                }
+
+                override fun onUnavailable() {
+                    Log.d("WIFI", "onUnavailable")
+                }
+            },
+        )
+        viewModel.postEvent(Event.ClearWifiEvents)
+    }
+
     LazyColumn {
         if (!isWifiEnabled) {
             item {
@@ -90,20 +162,21 @@ internal fun WifiScreen(viewModel: WifiVM = hiltViewModel()) {
             }
         }
         items(items = state.wifiNetworks) {
-            WifiNetworkItem(state = it)
+            WifiNetworkItem(state = it, onClick = { viewModel.postEvent(Event.SaveWifi(it)) })
         }
     }
 }
 
 @Composable
-private fun WifiNetworkItem(state: NetworkState) {
-    Card {
+private fun WifiNetworkItem(state: NetworkState, onClick: () -> Unit) {
+    Card(onClick = onClick) {
         Row(
             modifier = Modifier.padding(all = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(text = state.ssid, fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+                Text(text = state.bssid, fontWeight = FontWeight.Light)
             }
             Text(text = state.level.toString())
         }

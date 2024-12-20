@@ -1,6 +1,13 @@
 package com.featuremodule.homeImpl.wifi
 
+import android.net.MacAddress
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.wifi.ScanResult
+import android.net.wifi.WifiNetworkSpecifier
+import android.net.wifi.WifiNetworkSuggestion
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.featuremodule.core.ui.BaseVM
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,6 +21,12 @@ internal class WifiVM @Inject constructor() : BaseVM<State, Event>() {
             is Event.WifiResultsScanned -> setState {
                 copy(wifiNetworks = event.result.map { it.toNetworkState() })
             }
+
+            is Event.SaveWifi -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                saveAndSuggestWifi(event.network)
+            }
+
+            Event.ClearWifiEvents -> setState { copy(wifiToConnect = null, wifiSuggestions = null) }
         }
     }
 
@@ -21,7 +34,11 @@ internal class WifiVM @Inject constructor() : BaseVM<State, Event>() {
         ssid = SSID,
         bssid = BSSID,
         bandGhz = "",
-        channel = ScanResult.convertFrequencyMhzToChannelIfSupported(frequency),
+        channel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ScanResult.convertFrequencyMhzToChannelIfSupported(frequency)
+        } else {
+            -1
+        },
         channelWidthMhz = when (channelWidth) {
             ScanResult.CHANNEL_WIDTH_20MHZ -> 20
             ScanResult.CHANNEL_WIDTH_40MHZ -> 40
@@ -34,4 +51,29 @@ internal class WifiVM @Inject constructor() : BaseVM<State, Event>() {
         },
         level = level,
     )
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun connectToIotWifi(network: NetworkState) {
+        val specifier = WifiNetworkSpecifier.Builder()
+            .setSsid(network.ssid)
+            .setBssid(MacAddress.fromString(network.bssid))
+            .build()
+        val request = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .setNetworkSpecifier(specifier)
+            .build()
+        setState { copy(wifiToConnect = request) }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun saveAndSuggestWifi(network: NetworkState) {
+        val suggestions = arrayListOf(
+            WifiNetworkSuggestion.Builder()
+                .setSsid(network.ssid)
+                .setBssid(MacAddress.fromString(network.bssid))
+                .build(),
+        )
+
+        setState { copy(wifiSuggestions = suggestions) }
+    }
 }
