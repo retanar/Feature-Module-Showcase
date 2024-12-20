@@ -14,8 +14,10 @@ import android.provider.Settings
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,12 +29,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -155,6 +159,7 @@ internal fun WifiScreen(viewModel: WifiVM = hiltViewModel()) {
         viewModel.postEvent(Event.ClearWifiEvents)
     }
 
+    var clickedWifiItem by remember { mutableStateOf<NetworkState?>(null) }
     LazyColumn {
         if (!isWifiEnabled) {
             item {
@@ -162,8 +167,16 @@ internal fun WifiScreen(viewModel: WifiVM = hiltViewModel()) {
             }
         }
         items(items = state.wifiNetworks) {
-            WifiNetworkItem(state = it, onClick = { viewModel.postEvent(Event.SaveWifi(it)) })
+            WifiNetworkItem(state = it, onClick = { clickedWifiItem = it })
         }
+    }
+
+    clickedWifiItem?.let {
+        WifiItemMenu(
+            onDismiss = { clickedWifiItem = null },
+            onSave = { viewModel.postEvent(Event.SaveWifi(it)) },
+            onConnect = { viewModel.postEvent(Event.ConnectWifi(it)) },
+        )
     }
 }
 
@@ -179,6 +192,36 @@ private fun WifiNetworkItem(state: NetworkState, onClick: () -> Unit) {
                 Text(text = state.bssid, fontWeight = FontWeight.Light)
             }
             Text(text = state.level.toString())
+        }
+    }
+}
+
+@Composable
+private fun WifiItemMenu(
+    onDismiss: () -> Unit,
+    onSave: () -> Unit,
+    onConnect: () -> Unit,
+) {
+    @Composable
+    fun Entry(text: String, onClick: () -> Unit) {
+        Text(
+            text = text,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onClick()
+                    onDismiss()
+                }
+                .padding(all = 16.dp),
+        )
+    }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Card {
+            Column {
+                Entry("Save this network") { onSave() }
+                Entry("Connect as IoT") { onConnect() }
+            }
         }
     }
 }

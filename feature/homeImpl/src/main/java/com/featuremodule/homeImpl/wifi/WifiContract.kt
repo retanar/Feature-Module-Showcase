@@ -24,5 +24,6 @@ internal data class NetworkState(
 internal sealed interface Event : UiEvent {
     data class WifiResultsScanned(val result: List<ScanResult>) : Event
     data class SaveWifi(val network: NetworkState) : Event
+    data class ConnectWifi(val network: NetworkState) : Event
     data object ClearWifiEvents : Event
 }

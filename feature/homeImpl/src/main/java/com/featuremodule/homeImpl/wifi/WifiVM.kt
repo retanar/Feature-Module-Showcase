@@ -26,6 +26,10 @@ internal class WifiVM @Inject constructor() : BaseVM<State, Event>() {
                 saveAndSuggestWifi(event.network)
             }
 
+            is Event.ConnectWifi -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                connectToIotWifi(event.network)
+            }
+
             Event.ClearWifiEvents -> setState { copy(wifiToConnect = null, wifiSuggestions = null) }
         }
     }
