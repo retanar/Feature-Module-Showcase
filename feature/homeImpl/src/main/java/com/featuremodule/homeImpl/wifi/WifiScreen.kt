@@ -15,6 +15,7 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -182,16 +184,33 @@ internal fun WifiScreen(viewModel: WifiVM = hiltViewModel()) {
 
 @Composable
 private fun WifiNetworkItem(state: NetworkState, onClick: () -> Unit) {
-    Card(onClick = onClick) {
+    Card(onClick = onClick, modifier = Modifier.padding(2.dp)) {
         Row(
             modifier = Modifier.padding(all = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = state.ssid, fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
-                Text(text = state.bssid, fontWeight = FontWeight.Light)
+                Text(
+                    text = state.ssid,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                if (state.channel != -1) {
+                    Text(text = "Channel ${state.channel}", fontSize = 14.sp)
+                }
             }
-            Text(text = state.level.toString())
+
+            if (state.bandGhz.isNotEmpty() && state.channelWidthMhz != -1) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "${state.bandGhz} GHz")
+                    Text(text = "${state.channelWidthMhz} MHz", fontSize = 14.sp)
+                }
+            }
+
+            Text(text = "${state.level}")
         }
     }
 }

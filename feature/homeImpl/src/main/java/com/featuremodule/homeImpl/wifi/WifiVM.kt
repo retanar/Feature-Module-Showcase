@@ -9,6 +9,7 @@ import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.featuremodule.core.ui.BaseVM
+import com.featuremodule.core.util.WifiUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -19,7 +20,11 @@ internal class WifiVM @Inject constructor() : BaseVM<State, Event>() {
     override fun handleEvent(event: Event) {
         when (event) {
             is Event.WifiResultsScanned -> setState {
-                copy(wifiNetworks = event.result.map { it.toNetworkState() })
+                copy(
+                    wifiNetworks = event.result
+                        .map { it.toNetworkState() }
+                        .sortedByDescending { it.level },
+                )
             }
 
             is Event.SaveWifi -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -37,12 +42,8 @@ internal class WifiVM @Inject constructor() : BaseVM<State, Event>() {
     private fun ScanResult.toNetworkState() = NetworkState(
         ssid = SSID,
         bssid = BSSID,
-        bandGhz = "",
-        channel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            ScanResult.convertFrequencyMhzToChannelIfSupported(frequency)
-        } else {
-            -1
-        },
+        bandGhz = toBand(frequency),
+        channel = WifiUtils.convertFrequencyMhzToChannelIfSupported(frequency),
         channelWidthMhz = when (channelWidth) {
             ScanResult.CHANNEL_WIDTH_20MHZ -> 20
             ScanResult.CHANNEL_WIDTH_40MHZ -> 40
@@ -79,5 +80,13 @@ internal class WifiVM @Inject constructor() : BaseVM<State, Event>() {
         )
 
         setState { copy(wifiSuggestions = suggestions) }
+    }
+
+    private fun toBand(frequency: Int) = when {
+        WifiUtils.is24GHz(frequency) -> "2.4"
+        WifiUtils.is5GHz(frequency) -> "5"
+        WifiUtils.is6GHz(frequency) -> "6"
+        WifiUtils.is60GHz(frequency) -> "60"
+        else -> ""
     }
 }
