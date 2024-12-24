@@ -8,13 +8,17 @@ import android.net.wifi.WifiNetworkSpecifier
 import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.featuremodule.core.navigation.NavCommand
+import com.featuremodule.core.navigation.NavManager
 import com.featuremodule.core.ui.BaseVM
 import com.featuremodule.core.util.WifiUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-internal class WifiVM @Inject constructor() : BaseVM<State, Event>() {
+internal class WifiVM @Inject constructor(
+    private val navManager: NavManager,
+) : BaseVM<State, Event>() {
     override fun initialState() = State()
 
     override fun handleEvent(event: Event) {
@@ -38,6 +42,9 @@ internal class WifiVM @Inject constructor() : BaseVM<State, Event>() {
             Event.ClearWifiEvents -> setState { copy(wifiToConnect = null, wifiSuggestions = null) }
             is Event.UpdateLocationEnabled -> setState { copy(isLocationEnabled = event.enabled) }
             is Event.UpdateWifiEnabled -> setState { copy(isWifiEnabled = event.enabled) }
+            Event.PopBack -> launch {
+                navManager.navigate(NavCommand.PopBack)
+            }
         }
     }
 

@@ -30,4 +30,5 @@ internal sealed interface Event : UiEvent {
     data object ClearWifiEvents : Event
     data class UpdateLocationEnabled(val enabled: Boolean) : Event
     data class UpdateWifiEnabled(val enabled: Boolean) : Event
+    data object PopBack : Event
 }
