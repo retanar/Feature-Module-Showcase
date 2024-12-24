@@ -36,6 +36,8 @@ internal class WifiVM @Inject constructor() : BaseVM<State, Event>() {
             }
 
             Event.ClearWifiEvents -> setState { copy(wifiToConnect = null, wifiSuggestions = null) }
+            is Event.UpdateLocationEnabled -> setState { copy(isLocationEnabled = event.enabled) }
+            is Event.UpdateWifiEnabled -> setState { copy(isWifiEnabled = event.enabled) }
         }
     }
 

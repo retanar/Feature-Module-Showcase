@@ -10,6 +10,8 @@ internal data class State(
     val wifiNetworks: List<NetworkState> = emptyList(),
     val wifiToConnect: NetworkRequest? = null,
     val wifiSuggestions: ArrayList<WifiNetworkSuggestion>? = null,
+    val isLocationEnabled: Boolean = true,
+    val isWifiEnabled: Boolean = true,
 ) : UiState
 
 internal data class NetworkState(
@@ -26,4 +28,6 @@ internal sealed interface Event : UiEvent {
     data class SaveWifi(val network: NetworkState) : Event
     data class ConnectWifi(val network: NetworkState) : Event
     data object ClearWifiEvents : Event
+    data class UpdateLocationEnabled(val enabled: Boolean) : Event
+    data class UpdateWifiEnabled(val enabled: Boolean) : Event
 }
