@@ -15,6 +15,7 @@ import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -40,6 +41,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,7 +89,7 @@ internal fun WifiScreen(viewModel: WifiVM = hiltViewModel()) {
         try {
             viewModel.postEvent(Event.WifiResultsScanned(wifiManager.scanResults))
         } catch (e: SecurityException) {
-            e.printStackTrace()
+            Log.e("WifiScreen", "Failed to get scan results", e)
         }
     }
 
@@ -139,10 +141,7 @@ internal fun WifiScreen(viewModel: WifiVM = hiltViewModel()) {
 }
 
 @Composable
-private fun LocationPermissionDialog(
-    onSuccess: () -> Unit,
-    onFailure: () -> Unit,
-) {
+private fun LocationPermissionDialog(onSuccess: () -> Unit, onFailure: () -> Unit) {
     val launchRequest = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted ->
@@ -241,10 +240,7 @@ private fun WifiScreen(
 }
 
 @Composable
-private fun WifiNetworkItem(
-    state: NetworkState,
-    onClick: () -> Unit
-) = Card(
+private fun WifiNetworkItem(state: NetworkState, onClick: () -> Unit) = Card(
     onClick = onClick,
     modifier = Modifier
         .padding(2.dp)
@@ -314,42 +310,48 @@ private fun DisposableWifiScanCallback(
     context: Context,
     wifiManager: WifiManager,
     onReceive: () -> Unit,
-) = DisposableEffect(context, wifiManager) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        val callback = object : ScanResultsCallback() {
-            override fun onScanResultsAvailable() {
-                onReceive()
+) {
+    val onReceiveUpdated by rememberUpdatedState(onReceive)
+    DisposableEffect(context, wifiManager) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val callback = object : ScanResultsCallback() {
+                override fun onScanResultsAvailable() {
+                    onReceiveUpdated()
+                }
             }
-        }
-        wifiManager.registerScanResultsCallback(
-            ContextCompat.getMainExecutor(context),
-            callback,
-        )
+            wifiManager.registerScanResultsCallback(
+                ContextCompat.getMainExecutor(context),
+                callback,
+            )
 
-        onDispose {
-            wifiManager.unregisterScanResultsCallback(callback)
-        }
-    } else {
-        val wifiScanReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                onReceive()
+            onDispose {
+                wifiManager.unregisterScanResultsCallback(callback)
             }
-        }
-        val intentFilter = IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        context.registerReceiver(wifiScanReceiver, intentFilter)
+        } else {
+            val wifiScanReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context, intent: Intent) {
+                    onReceiveUpdated()
+                }
+            }
+            val intentFilter = IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+            context.registerReceiver(wifiScanReceiver, intentFilter)
 
-        onDispose {
-            context.unregisterReceiver(wifiScanReceiver)
+            onDispose {
+                context.unregisterReceiver(wifiScanReceiver)
+            }
         }
     }
 }
 
+// Because ArrayList is not mutated, and is used as immutable
+@Suppress("ktlint:compose:mutable-params-check")
 @Composable
 private fun AddWifiSuggestion(
     wifiSuggestions: ArrayList<WifiNetworkSuggestion>?,
     wifiManager: WifiManager,
     onDone: () -> Unit,
 ) {
+    val onDoneUpdated by rememberUpdatedState(onDone)
     val launchAddWifi = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
     ) { activityResult ->
@@ -360,17 +362,17 @@ private fun AddWifiSuggestion(
             .orEmpty()
 
         if (result.any {
-                it == Settings.ADD_WIFI_RESULT_SUCCESS
-                    || it == Settings.ADD_WIFI_RESULT_ALREADY_EXISTS
-            }) {
+                it == Settings.ADD_WIFI_RESULT_SUCCESS ||
+                    it == Settings.ADD_WIFI_RESULT_ALREADY_EXISTS
+            }
+        ) {
             wifiManager.addNetworkSuggestions(wifiSuggestions.orEmpty())
         }
-        onDone()
+        onDoneUpdated()
     }
 
     LaunchedEffect(wifiSuggestions) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@LaunchedEffect
-
         if (wifiSuggestions.isNullOrEmpty()) return@LaunchedEffect
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -380,7 +382,7 @@ private fun AddWifiSuggestion(
         } else {
             // Requires only API Q (29)
             wifiManager.addNetworkSuggestions(wifiSuggestions)
-            onDone()
+            onDoneUpdated()
         }
     }
 }
@@ -391,6 +393,7 @@ private fun ConnectToWifi(
     wifiToConnect: NetworkRequest?,
     onDone: () -> Unit,
 ) {
+    val onDoneUpdated by rememberUpdatedState(onDone)
     val connectivityManager = remember { context.getSystemService(ConnectivityManager::class.java) }
     LaunchedEffect(wifiToConnect) {
         if (wifiToConnect == null) return@LaunchedEffect
@@ -399,7 +402,7 @@ private fun ConnectToWifi(
             wifiToConnect,
             ConnectivityManager.NetworkCallback(),
         )
-        onDone()
+        onDoneUpdated()
     }
 }
 

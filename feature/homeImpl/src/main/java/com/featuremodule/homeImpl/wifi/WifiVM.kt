@@ -56,9 +56,7 @@ internal class WifiVM @Inject constructor(
         channelWidthMhz = when (channelWidth) {
             ScanResult.CHANNEL_WIDTH_20MHZ -> 20
             ScanResult.CHANNEL_WIDTH_40MHZ -> 40
-            ScanResult.CHANNEL_WIDTH_80MHZ,
-            ScanResult.CHANNEL_WIDTH_80MHZ_PLUS_MHZ -> 80
-
+            ScanResult.CHANNEL_WIDTH_80MHZ, ScanResult.CHANNEL_WIDTH_80MHZ_PLUS_MHZ -> 80
             ScanResult.CHANNEL_WIDTH_160MHZ -> 160
             ScanResult.CHANNEL_WIDTH_320MHZ -> 320
             else -> -1
