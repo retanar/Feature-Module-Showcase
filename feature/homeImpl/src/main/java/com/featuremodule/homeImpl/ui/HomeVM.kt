@@ -17,32 +17,32 @@ internal class HomeVM @Inject constructor(
     override fun initialState() = State
 
     override fun handleEvent(event: Event) {
-        when (event) {
-            Event.NavigateToFeatureA -> launch {
-                val randomInt = Random.nextInt(until = 10)
-                // Using `saveState = false` causes return to Feature A on Home item click
-                navManager.navigate(NavCommand.OpenNavBarRoute(NavBarItems.FeatureA.graphRoute))
+        launch {
+            when (event) {
+                Event.NavigateToFeatureA -> {
+                    val randomInt = Random.nextInt(until = 10)
+                    // Using `saveState = false` causes return to Feature A on Home item click
+                    navManager.navigate(NavCommand.OpenNavBarRoute(NavBarItems.FeatureA.graphRoute))
 
-                navManager.navigate(
-                    NavCommand.Forward(FeatureADestination.constructRoute(randomInt)),
-                )
-            }
+                    navManager.navigate(
+                        NavCommand.Forward(FeatureADestination.constructRoute(randomInt)),
+                    )
+                }
 
-            Event.NavigateToExoplayer -> launch {
-                navManager.navigate(
+                Event.NavigateToExoplayer -> navManager.navigate(
                     NavCommand.Forward(InternalRoutes.ExoplayerDestination.constructRoute()),
                 )
-            }
 
-            Event.NavigateToCamera -> launch {
-                navManager.navigate(
+                Event.NavigateToCamera -> navManager.navigate(
                     NavCommand.Forward(InternalRoutes.ImageUploadDestination.constructRoute()),
                 )
-            }
 
-            Event.NavigateToBarcode -> launch {
-                navManager.navigate(
+                Event.NavigateToBarcode -> navManager.navigate(
                     NavCommand.Forward(InternalRoutes.BarcodeCameraDestination.constructRoute()),
+                )
+
+                Event.NavigateToWifi -> navManager.navigate(
+                    NavCommand.Forward(InternalRoutes.WifiDestination.constructRoute()),
                 )
             }
         }

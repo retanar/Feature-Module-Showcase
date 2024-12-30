@@ -47,6 +47,7 @@ internal fun HomeScreen(route: String?, viewModel: HomeVM = hiltViewModel()) {
             GenericButton(text = "Exoplayer") { viewModel.postEvent(Event.NavigateToExoplayer) }
             GenericButton(text = "Camera") { viewModel.postEvent(Event.NavigateToCamera) }
             GenericButton(text = "Barcode") { viewModel.postEvent(Event.NavigateToBarcode) }
+            GenericButton(text = "Wifi") { viewModel.postEvent(Event.NavigateToWifi) }
         }
     }
 }
