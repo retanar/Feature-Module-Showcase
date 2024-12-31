@@ -21,8 +21,9 @@ import com.featuremodule.core.util.CollectWithLifecycle
 
 @Composable
 internal fun AppContent(
-    viewModel: MainVM = hiltViewModel(),
     updateLoadedState: (isLoaded: Boolean) -> Unit,
+    updateTheme: (ThemeState) -> Unit,
+    viewModel: MainVM = hiltViewModel(),
 ) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -31,6 +32,10 @@ internal fun AppContent(
 
     LaunchedEffect(state.isLoaded, updateLoadedState) {
         updateLoadedState(state.isLoaded)
+    }
+
+    LaunchedEffect(state.theme) {
+        updateTheme(state.theme)
     }
 
     state.commands.CollectWithLifecycle {

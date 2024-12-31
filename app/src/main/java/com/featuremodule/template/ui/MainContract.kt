@@ -15,9 +15,9 @@ internal data class State(
 ) : UiState
 
 internal data class ThemeState(
-    val lightColorScheme: ColorScheme = ColorsLight.Default.scheme,
-    val darkColorScheme: ColorScheme = ColorsDark.Default.scheme,
-    val useSystemDarkTheme: Boolean = true,
+    val colorsLight: ColorScheme = ColorsLight.Default.scheme,
+    val colorsDark: ColorScheme = ColorsDark.Default.scheme,
+    val switchToDarkWithSystem: Boolean = true,
 )
 
 internal sealed interface Event : UiEvent {

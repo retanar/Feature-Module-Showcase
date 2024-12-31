@@ -16,18 +16,17 @@ internal class MainVM @Inject constructor(
 ) : BaseVM<State, Event>() {
     init {
         launch {
+            // The only loading for now is theme loading, so isLoaded is set together
             themePreferences.themeModelFlow.collect {
-                setState { copy(theme = it.toThemeState()) }
+                setState { copy(theme = it.toThemeState(), isLoaded = true) }
             }
-            // Do something useful before loading
-            setState { copy(isLoaded = true) }
         }
     }
 
     private fun ThemePreferences.ThemeModel.toThemeState() = ThemeState(
-        lightColorScheme = ColorsLight.valueOf(lightTheme ?: ColorsLight.Default.name).scheme,
-        darkColorScheme = ColorsDark.valueOf(darkTheme ?: ColorsDark.Default.name).scheme,
-        useSystemDarkTheme = useSystemDarkTheme,
+        colorsLight = ColorsLight.valueOf(lightTheme ?: ColorsLight.Default.name).scheme,
+        colorsDark = ColorsDark.valueOf(darkTheme ?: ColorsDark.Default.name).scheme,
+        switchToDarkWithSystem = switchToDarkWithSystem,
     )
 
     override fun initialState() = State(navManager.commands)
