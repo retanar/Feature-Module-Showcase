@@ -81,6 +81,7 @@ dependencies {
     implementation(projects.feature.foxFeatureApi)
     implementation(projects.feature.foxFeatureImpl)
     implementation(projects.core)
+    implementation(projects.data)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
