@@ -19,8 +19,8 @@ class ThemePreferences @Inject constructor(
 
     fun setDarkTheme(theme: String?) = preferences.edit { putString(KEY_THEME_DARK, theme) }
 
-    fun setSwitchToDarkWithSystem(shouldSwitch: Boolean) =
-        preferences.edit { putBoolean(KEY_SWITCH_DARK_WITH_SYSTEM, shouldSwitch) }
+    fun setThemeStyle(theme: String?) =
+        preferences.edit { putString(KEY_THEME_STYLE, theme) }
 
     val themeModelFlow = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
@@ -37,19 +37,19 @@ class ThemePreferences @Inject constructor(
     fun getCurrentPreferences() = ThemeModel(
         lightTheme = preferences.getString(KEY_THEME_LIGHT, null),
         darkTheme = preferences.getString(KEY_THEME_DARK, null),
-        switchToDarkWithSystem = preferences.getBoolean(KEY_SWITCH_DARK_WITH_SYSTEM, true),
+        themeStyle = preferences.getString(KEY_THEME_STYLE, null),
     )
 
     data class ThemeModel(
         val lightTheme: String?,
         val darkTheme: String?,
-        val switchToDarkWithSystem: Boolean,
+        val themeStyle: String?,
     )
 
     companion object {
         private const val FILE_NAME = "theme_preferences"
         private const val KEY_THEME_LIGHT = "theme_light"
         private const val KEY_THEME_DARK = "theme_dark"
-        private const val KEY_SWITCH_DARK_WITH_SYSTEM = "switch_dark_with_system"
+        private const val KEY_THEME_STYLE = "theme_style"
     }
 }

@@ -6,6 +6,7 @@ import com.featuremodule.core.ui.UiEvent
 import com.featuremodule.core.ui.UiState
 import com.featuremodule.core.ui.theme.ColorsDark
 import com.featuremodule.core.ui.theme.ColorsLight
+import com.featuremodule.core.ui.theme.ThemeStyle
 import kotlinx.coroutines.flow.SharedFlow
 
 internal data class State(
@@ -17,7 +18,7 @@ internal data class State(
 internal data class ThemeState(
     val colorsLight: ColorScheme = ColorsLight.Default.scheme,
     val colorsDark: ColorScheme = ColorsDark.Default.scheme,
-    val switchToDarkWithSystem: Boolean = true,
+    val themeStyle: ThemeStyle = ThemeStyle.System,
 )
 
 internal sealed interface Event : UiEvent {

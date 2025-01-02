@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
             AppTheme(
                 colorsLight = theme.colorsLight,
                 colorsDark = theme.colorsDark,
-                switchToDarkWithSystem = theme.switchToDarkWithSystem,
+                themeStyle = theme.themeStyle,
             ) {
                 AppContent(
                     updateLoadedState = { isLoaded.value = it },

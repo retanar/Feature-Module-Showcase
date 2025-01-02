@@ -12,18 +12,17 @@ import androidx.compose.runtime.ReadOnlyComposable
 fun AppTheme(
     colorsLight: ColorScheme,
     colorsDark: ColorScheme,
-    switchToDarkWithSystem: Boolean,
-    isSystemDark: Boolean = isSystemInDarkTheme(),
+    themeStyle: ThemeStyle,
     content: @Composable () -> Unit,
 ) {
-    val colorScheme = if (switchToDarkWithSystem && isSystemDark) {
-        colorsDark
-    } else {
-        colorsLight
+    val isStyleDark = when (themeStyle) {
+        ThemeStyle.Light -> false
+        ThemeStyle.Dark -> true
+        ThemeStyle.System -> isSystemInDarkTheme()
     }
+    val colorScheme = if (isStyleDark) colorsDark else colorsLight
 
-    // Ignores whether color scheme is dark
-    ProvideAppColors(isSystemDark) {
+    ProvideAppColors(isStyleDark) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,
@@ -50,6 +49,13 @@ enum class ColorsDark(val scheme: ColorScheme) {
             tertiary = Pink80,
         ),
     )
+}
+
+/** Sets light or dark theme as active, or switches it with system */
+enum class ThemeStyle {
+    Light,
+    Dark,
+    System
 }
 
 /**
