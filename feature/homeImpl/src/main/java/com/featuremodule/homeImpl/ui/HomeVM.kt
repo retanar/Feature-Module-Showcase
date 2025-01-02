@@ -44,6 +44,10 @@ internal class HomeVM @Inject constructor(
                 Event.NavigateToWifi -> navManager.navigate(
                     NavCommand.Forward(InternalRoutes.WifiDestination.constructRoute()),
                 )
+
+                Event.NavigateToChooseTheme -> navManager.navigate(
+                    NavCommand.Forward(InternalRoutes.ChooseThemeDestination.constructRoute()),
+                )
             }
         }
     }

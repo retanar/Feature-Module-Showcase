@@ -14,6 +14,7 @@ import com.featuremodule.homeImpl.barcode.BarcodeResultScreen
 import com.featuremodule.homeImpl.camera.TakePhotoScreen
 import com.featuremodule.homeImpl.exoplayer.ExoplayerScreen
 import com.featuremodule.homeImpl.imageUpload.ImageUploadScreen
+import com.featuremodule.homeImpl.theming.ChooseThemeScreen
 import com.featuremodule.homeImpl.ui.HomeScreen
 import com.featuremodule.homeImpl.wifi.WifiScreen
 
@@ -53,6 +54,10 @@ fun NavGraphBuilder.registerHome() {
 
     composable(InternalRoutes.WifiDestination.ROUTE) {
         WifiScreen()
+    }
+
+    composable(InternalRoutes.ChooseThemeDestination.ROUTE) {
+        ChooseThemeScreen()
     }
 }
 
@@ -95,6 +100,12 @@ internal class InternalRoutes {
 
     object WifiDestination {
         const val ROUTE = "wifi"
+
+        fun constructRoute() = ROUTE
+    }
+
+    object ChooseThemeDestination {
+        const val ROUTE = "choose_theme"
 
         fun constructRoute() = ROUTE
     }
