@@ -104,8 +104,14 @@ private fun ThemeRadioButton(
             )
             Box(
                 modifier = Modifier
+                    .background(color = colorScheme.secondary)
+                    .fillMaxHeight()
+                    .weight(1f),
+            )
+            Box(
+                modifier = Modifier
                     .background(
-                        color = colorScheme.secondary,
+                        color = colorScheme.tertiary,
                         shape = RoundedCornerShape(topEnd = 4.dp, bottomEnd = 4.dp),
                     )
                     .fillMaxHeight()

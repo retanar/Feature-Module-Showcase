@@ -13,17 +13,17 @@ val LocalAppColors = staticCompositionLocalOf { AppColors() }
  * Draft for providing own color hierarchy to be used in the same way as MaterialTheme.
  */
 data class AppColors(
-    val primary: Color = Purple40,
-    val secondary: Color = PurpleGrey40,
-    val tertiary: Color = Pink40,
+    val primary: Color = ColorsLight.Default.scheme.primary,
+    val secondary: Color = ColorsLight.Default.scheme.secondary,
+    val tertiary: Color = ColorsLight.Default.scheme.tertiary,
 )
 
 private val LightAppColors = AppColors()
 
 private val DarkAppColors = AppColors(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
+    primary = ColorsDark.Default.scheme.primary,
+    secondary = ColorsDark.Default.scheme.secondary,
+    tertiary = ColorsDark.Default.scheme.tertiary,
 )
 
 @Composable
