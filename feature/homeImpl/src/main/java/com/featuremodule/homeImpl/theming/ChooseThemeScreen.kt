@@ -1,6 +1,7 @@
 package com.featuremodule.homeImpl.theming
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,17 +10,25 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -35,7 +44,11 @@ import com.featuremodule.core.ui.theme.ColorsLight
 internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+    ) {
         Text(
             text = "Light themes",
             fontWeight = FontWeight.SemiBold,
@@ -43,7 +56,7 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
         )
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 8.dp),
+            contentPadding = PaddingValues(all = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(ColorsLight.entries) {
@@ -55,6 +68,7 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
                 )
             }
         }
+        ThemePreview(state.previewTheme.colorsLight.scheme)
 
         Spacer(Modifier.height(24.dp))
         Text(
@@ -64,7 +78,7 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
         )
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 8.dp),
+            contentPadding = PaddingValues(all = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(ColorsDark.entries) {
@@ -76,6 +90,7 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
                 )
             }
         }
+        ThemePreview(state.previewTheme.colorsDark.scheme)
     }
 }
 
@@ -122,5 +137,42 @@ private fun ThemeRadioButton(
             selected = isSelected,
             onClick = null,
         )
+    }
+}
+
+@Composable
+private fun ThemePreview(colorScheme: ColorScheme) {
+    MaterialTheme(colorScheme = colorScheme) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.background,
+                    shape = MaterialTheme.shapes.large,
+                )
+                .border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = MaterialTheme.shapes.large,
+                )
+                .padding(all = 4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            Text("Theme Preview")
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Button(onClick = {}) { Text("Button") }
+                OutlinedButton(onClick = {}) { Text("Button") }
+                TextButton(onClick = {}) { Text("Button") }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Card(onClick = {}) {
+                    Text(text = "Card", modifier = Modifier.padding(12.dp))
+                }
+                OutlinedCard(onClick = {}) {
+                    Text(text = "Card", modifier = Modifier.padding(12.dp))
+                }
+            }
+        }
     }
 }
