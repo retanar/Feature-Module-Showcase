@@ -60,15 +60,23 @@ internal class ChooseThemeVM @Inject constructor(
                     launch { navManager.navigate(NavCommand.PopBack) }
                     return
                 }
+                setState { copy(showSaveCloseDialog = true) }
             }
 
             Event.PopBack -> launch { navManager.navigate(NavCommand.PopBack) }
+
+            Event.HideSaveCloseDialog -> setState { copy(showSaveCloseDialog = false) }
         }
     }
 
     private fun saveTheme() = with(state.value.previewTheme) {
-        themePreferences.setLightTheme(colorsLight.name)
-        themePreferences.setDarkTheme(colorsDark.name)
-        themePreferences.setThemeStyle(themeStyle.name)
+        themePreferences.setAll(
+            ThemePreferences.ThemeModel(
+                lightTheme = colorsLight.name,
+                darkTheme = colorsDark.name,
+                themeStyle = themeStyle.name,
+            ),
+        )
+        loadSavedTheme()
     }
 }

@@ -22,6 +22,12 @@ class ThemePreferences @Inject constructor(
     fun setThemeStyle(theme: String?) =
         preferences.edit { putString(KEY_THEME_STYLE, theme) }
 
+    fun setAll(themeModel: ThemeModel) = preferences.edit {
+        putString(KEY_THEME_LIGHT, themeModel.lightTheme)
+        putString(KEY_THEME_DARK, themeModel.darkTheme)
+        putString(KEY_THEME_STYLE, themeModel.themeStyle)
+    }
+
     val themeModelFlow = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
             // trySendBlocking is used just in case, trySend should be enough too

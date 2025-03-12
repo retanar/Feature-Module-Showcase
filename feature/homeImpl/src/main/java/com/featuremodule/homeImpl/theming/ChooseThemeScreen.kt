@@ -1,5 +1,6 @@
 package com.featuremodule.homeImpl.theming
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -34,7 +36,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.featuremodule.core.ui.theme.ColorsDark
@@ -44,53 +48,73 @@ import com.featuremodule.core.ui.theme.ColorsLight
 internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-    ) {
-        Text(
-            text = "Light themes",
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(horizontal = 8.dp),
-        )
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(all = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+    // TODO: save button, loader, themestyle chooser
+    Scaffold { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
         ) {
-            items(ColorsLight.entries) {
-                ThemeRadioButton(
-                    name = it.name,
-                    colorScheme = it.scheme,
-                    isSelected = state.previewTheme.colorsLight == it,
-                    onClick = { viewModel.postEvent(Event.PreviewLightTheme(it)) },
-                )
+            Text(
+                text = "Light themes",
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(horizontal = 8.dp),
+            )
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(all = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(ColorsLight.entries) {
+                    ThemeRadioButton(
+                        name = it.name,
+                        colorScheme = it.scheme,
+                        isSelected = state.previewTheme.colorsLight == it,
+                        onClick = { viewModel.postEvent(Event.PreviewLightTheme(it)) },
+                    )
+                }
             }
-        }
-        ThemePreview(state.previewTheme.colorsLight.scheme)
+            ThemePreview(state.previewTheme.colorsLight.scheme)
 
-        Spacer(Modifier.height(24.dp))
-        Text(
-            text = "Dark themes",
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(horizontal = 8.dp),
-        )
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(all = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            items(ColorsDark.entries) {
-                ThemeRadioButton(
-                    name = it.name,
-                    colorScheme = it.scheme,
-                    isSelected = state.previewTheme.colorsDark == it,
-                    onClick = { viewModel.postEvent(Event.PreviewDarkTheme(it)) },
-                )
+            Spacer(Modifier.height(24.dp))
+            Text(
+                text = "Dark themes",
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(horizontal = 8.dp),
+            )
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(all = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(ColorsDark.entries) {
+                    ThemeRadioButton(
+                        name = it.name,
+                        colorScheme = it.scheme,
+                        isSelected = state.previewTheme.colorsDark == it,
+                        onClick = { viewModel.postEvent(Event.PreviewDarkTheme(it)) },
+                    )
+                }
             }
+            ThemePreview(state.previewTheme.colorsDark.scheme)
         }
-        ThemePreview(state.previewTheme.colorsDark.scheme)
+    }
+
+    if (state.showSaveCloseDialog) {
+        SaveOrCloseDialog(
+            onDismiss = { viewModel.postEvent(Event.HideSaveCloseDialog) },
+            onSaveClose = {
+                viewModel.postEvent(Event.SaveTheme)
+                viewModel.postEvent(Event.PopBack)
+            },
+            onNoSaveClose = { viewModel.postEvent(Event.PopBack) },
+            onNoClose = { viewModel.postEvent(Event.HideSaveCloseDialog) },
+        )
+    }
+
+    BackHandler {
+        viewModel.postEvent(Event.PopBackIfSaved)
     }
 }
 
@@ -159,7 +183,7 @@ private fun ThemePreview(colorScheme: ColorScheme) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
-            Text("Theme Preview")
+            Text(text = "Theme Preview", color = MaterialTheme.colorScheme.onBackground)
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 Button(onClick = {}) { Text("Button") }
                 OutlinedButton(onClick = {}) { Text("Button") }
@@ -171,6 +195,46 @@ private fun ThemePreview(colorScheme: ColorScheme) {
                 }
                 OutlinedCard(onClick = {}) {
                     Text(text = "Card", modifier = Modifier.padding(12.dp))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SaveOrCloseDialog(
+    onDismiss: () -> Unit,
+    onSaveClose: () -> Unit,
+    onNoSaveClose: () -> Unit,
+    onNoClose: () -> Unit,
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(all = 24.dp)) {
+                Text(
+                    text = "Changes aren't saved",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(Modifier.height(24.dp))
+
+                Button(
+                    onClick = onSaveClose,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text("Save and close")
+                }
+                OutlinedButton(
+                    onClick = onNoSaveClose,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text("Don't save and close")
+                }
+                OutlinedButton(
+                    onClick = onNoClose,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text("Don't close")
                 }
             }
         }
