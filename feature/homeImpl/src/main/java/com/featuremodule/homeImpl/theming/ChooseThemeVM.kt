@@ -41,20 +41,10 @@ internal class ChooseThemeVM @Inject constructor(
 
     override fun handleEvent(event: Event) {
         when (event) {
-            is Event.PreviewLightTheme -> setState {
-                copy(previewTheme = previewTheme.copy(colorsLight = event.colors))
-            }
-
-            is Event.PreviewDarkTheme -> setState {
-                copy(previewTheme = previewTheme.copy(colorsDark = event.colors))
-            }
-
-            is Event.SetThemeStyle -> setState {
-                copy(previewTheme = previewTheme.copy(themeStyle = event.themeStyle))
-            }
-
-            is Event.SaveTheme -> saveTheme()
-
+            is Event.PreviewLightTheme -> updatePreviewTheme { copy(colorsLight = event.colors) }
+            is Event.PreviewDarkTheme -> updatePreviewTheme { copy(colorsDark = event.colors) }
+            is Event.SetThemeStyle -> updatePreviewTheme { copy(themeStyle = event.themeStyle) }
+            Event.SaveTheme -> saveTheme()
             Event.PopBackIfSaved -> {
                 if (state.value.previewTheme == savedTheme) {
                     launch { navManager.navigate(NavCommand.PopBack) }
@@ -64,9 +54,16 @@ internal class ChooseThemeVM @Inject constructor(
             }
 
             Event.PopBack -> launch { navManager.navigate(NavCommand.PopBack) }
-
             Event.HideSaveCloseDialog -> setState { copy(showSaveCloseDialog = false) }
         }
+    }
+
+    private fun updatePreviewTheme(newTheme: ThemeState.() -> ThemeState) = setState {
+        val updatedTheme = previewTheme.newTheme()
+        copy(
+            previewTheme = updatedTheme,
+            isThemeSaved = updatedTheme == savedTheme,
+        )
     }
 
     private fun saveTheme() = with(state.value.previewTheme) {
@@ -78,5 +75,6 @@ internal class ChooseThemeVM @Inject constructor(
             ),
         )
         loadSavedTheme()
+        setState { copy(isThemeSaved = true) }
     }
 }

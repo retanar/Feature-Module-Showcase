@@ -9,6 +9,7 @@ import com.featuremodule.core.ui.theme.ThemeStyle
 internal data class State(
     val isLoading: Boolean = true,
     val previewTheme: ThemeState = ThemeState(),
+    val isThemeSaved: Boolean = true,
     val showSaveCloseDialog: Boolean = false,
 ) : UiState
 

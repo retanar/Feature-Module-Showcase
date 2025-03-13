@@ -24,6 +24,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
@@ -35,6 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -43,13 +46,25 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.featuremodule.core.ui.theme.ColorsDark
 import com.featuremodule.core.ui.theme.ColorsLight
+import com.featuremodule.homeImpl.R
 
 @Composable
 internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // TODO: save button, loader, themestyle chooser
-    Scaffold { innerPadding ->
+    // TODO: loader, themestyle chooser
+    Scaffold(
+        floatingActionButton = {
+            if (!state.isThemeSaved) {
+                FloatingActionButton(onClick = { viewModel.postEvent(Event.SaveTheme) }) {
+                    Icon(
+                        painter = painterResource(R.drawable.save),
+                        contentDescription = null,
+                    )
+                }
+            }
+        },
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -76,8 +91,8 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
                 }
             }
             ThemePreview(state.previewTheme.colorsLight.scheme)
-
             Spacer(Modifier.height(24.dp))
+
             Text(
                 text = "Dark themes",
                 fontWeight = FontWeight.SemiBold,
@@ -98,6 +113,7 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
                 }
             }
             ThemePreview(state.previewTheme.colorsDark.scheme)
+            Spacer(Modifier.height(24.dp))
         }
     }
 
@@ -113,7 +129,7 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
         )
     }
 
-    BackHandler {
+    BackHandler(enabled = !state.isThemeSaved) {
         viewModel.postEvent(Event.PopBackIfSaved)
     }
 }
