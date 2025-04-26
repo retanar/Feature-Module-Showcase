@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -79,16 +80,7 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
         ) {
             ThemeStyleChooser(state.previewTheme.themeStyle, viewModel::postEvent)
 
-            Text(
-                text = "Light themes",
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(horizontal = 8.dp),
-            )
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(all = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
+            ThemeChooserBlock("Light themes", state.previewTheme.colorsLight.scheme) {
                 items(ColorsLight.entries) {
                     ThemeRadioButton(
                         name = it.name,
@@ -98,19 +90,8 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
                     )
                 }
             }
-            ThemePreview(state.previewTheme.colorsLight.scheme)
-            Spacer(Modifier.height(24.dp))
 
-            Text(
-                text = "Dark themes",
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(horizontal = 8.dp),
-            )
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(all = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
+            ThemeChooserBlock("Dark themes", state.previewTheme.colorsDark.scheme) {
                 items(ColorsDark.entries) {
                     ThemeRadioButton(
                         name = it.name,
@@ -120,8 +101,6 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
                     )
                 }
             }
-            ThemePreview(state.previewTheme.colorsDark.scheme)
-            Spacer(Modifier.height(24.dp))
         }
     }
 
@@ -192,6 +171,28 @@ private fun ThemeStyleChooser(themeStyle: ThemeStyle, postEvent: (Event) -> Unit
             }
         }
     }
+}
+
+@Composable
+private fun ThemeChooserBlock(
+    title: String,
+    colorScheme: ColorScheme,
+    radioButtonsContent: LazyListScope.() -> Unit,
+) = Column {
+    Text(
+        text = title,
+        fontWeight = FontWeight.SemiBold,
+        modifier = Modifier.padding(horizontal = 8.dp),
+    )
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(all = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        radioButtonsContent()
+    }
+    ThemePreview(colorScheme)
+    Spacer(Modifier.height(24.dp))
 }
 
 @Composable

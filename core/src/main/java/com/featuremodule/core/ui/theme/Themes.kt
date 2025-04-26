@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package com.featuremodule.core.ui.theme
 
 import androidx.compose.material3.ColorScheme
