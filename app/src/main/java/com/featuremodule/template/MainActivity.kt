@@ -10,10 +10,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.featuremodule.core.ui.theme.AppTheme
 import com.featuremodule.template.ui.AppContent
+import com.featuremodule.template.ui.ThemeState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -29,8 +34,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge(statusBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT))
 
         setContent {
-            AppTheme {
-                AppContent(updateLoadedState = { isLoaded.value = it })
+            var theme by remember { mutableStateOf(ThemeState()) }
+            AppTheme(
+                colorsLight = theme.colorsLight,
+                colorsDark = theme.colorsDark,
+                themeStyle = theme.themeStyle,
+            ) {
+                AppContent(
+                    updateLoadedState = { isLoaded.value = it },
+                    updateTheme = { theme = it },
+                )
             }
         }
     }

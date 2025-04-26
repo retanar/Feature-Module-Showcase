@@ -9,6 +9,7 @@ android {
 dependencies {
     implementation(projects.feature.homeApi)
     implementation(projects.feature.featureAApi)
+    implementation(projects.data)
 
     implementation(libs.bundles.exoplayer)
     implementation(libs.bundles.camerax)
