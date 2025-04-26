@@ -90,7 +90,7 @@ enum class ColorsLight(val scheme: ColorScheme) {
             surfaceContainerHigh = Color(0xFFE6E9E0),
             surfaceContainerHighest = Color(0xFFE0E4DB),
         ),
-    )
+    ),
 }
 
 enum class ColorsDark(val scheme: ColorScheme) {
@@ -178,12 +178,12 @@ enum class ColorsDark(val scheme: ColorScheme) {
             surfaceContainerHigh = Color(0xFF272B25),
             surfaceContainerHighest = Color(0xFF323630),
         ),
-    )
+    ),
 }
 
 /** Sets light or dark theme as active, or switches it with system */
 enum class ThemeStyle {
     Light,
     Dark,
-    System
+    System,
 }

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +33,7 @@ internal fun AppContent(
         updateLoadedState(state.isLoaded)
     }
 
-    LaunchedEffect(state.theme) {
+    LaunchedEffect(state.theme, updateTheme) {
         updateTheme(state.theme)
     }
 
@@ -51,9 +50,8 @@ internal fun AppContent(
                 currentDestination = backStackEntry?.destination,
             )
         },
-        contentWindowInsets = WindowInsets(0),
-        // Remove this and status bar coloring in AppTheme for edge to edge
-        modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
+        // Remove this for edge to edge
+        contentWindowInsets = WindowInsets.statusBars,
     ) { innerPadding ->
         AppNavHost(
             navController = navController,

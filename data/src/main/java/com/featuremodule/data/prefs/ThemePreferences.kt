@@ -19,8 +19,7 @@ class ThemePreferences @Inject constructor(
 
     fun setDarkTheme(theme: String?) = preferences.edit { putString(KEY_THEME_DARK, theme) }
 
-    fun setThemeStyle(theme: String?) =
-        preferences.edit { putString(KEY_THEME_STYLE, theme) }
+    fun setThemeStyle(theme: String?) = preferences.edit { putString(KEY_THEME_STYLE, theme) }
 
     fun setAll(themeModel: ThemeModel) = preferences.edit {
         putString(KEY_THEME_LIGHT, themeModel.lightTheme)

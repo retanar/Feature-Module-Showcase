@@ -7,7 +7,6 @@ import com.featuremodule.core.ui.theme.ColorsLight
 import com.featuremodule.core.ui.theme.ThemeStyle
 
 internal data class State(
-    val isLoading: Boolean = true,
     val previewTheme: ThemeState = ThemeState(),
     val isThemeSaved: Boolean = true,
     val showSaveCloseDialog: Boolean = false,
@@ -20,8 +19,8 @@ internal data class ThemeState(
 )
 
 internal sealed interface Event : UiEvent {
-    data class PreviewLightTheme(val colors: ColorsLight) : Event
-    data class PreviewDarkTheme(val colors: ColorsDark) : Event
+    data class SetLightTheme(val colors: ColorsLight) : Event
+    data class SetDarkTheme(val colors: ColorsDark) : Event
     data class SetThemeStyle(val themeStyle: ThemeStyle) : Event
     data object SaveTheme : Event
 

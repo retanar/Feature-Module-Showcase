@@ -37,6 +37,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -91,7 +94,7 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
                         name = it.name,
                         colorScheme = it.scheme,
                         isSelected = state.previewTheme.colorsLight == it,
-                        onClick = { viewModel.postEvent(Event.PreviewLightTheme(it)) },
+                        onClick = { viewModel.postEvent(Event.SetLightTheme(it)) },
                     )
                 }
             }
@@ -113,7 +116,7 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
                         name = it.name,
                         colorScheme = it.scheme,
                         isSelected = state.previewTheme.colorsDark == it,
-                        onClick = { viewModel.postEvent(Event.PreviewDarkTheme(it)) },
+                        onClick = { viewModel.postEvent(Event.SetDarkTheme(it)) },
                     )
                 }
             }
@@ -140,11 +143,8 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
 }
 
 @Composable
-private fun ThemeStyleChooser(
-    themeStyle: ThemeStyle,
-    postEvent: (Event) -> Unit,
-) {
-    var isThemeDropdownExpanded = false
+private fun ThemeStyleChooser(themeStyle: ThemeStyle, postEvent: (Event) -> Unit) {
+    var isThemeDropdownExpanded by remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier.height(48.dp),
@@ -177,18 +177,18 @@ private fun ThemeStyleChooser(
                 expanded = isThemeDropdownExpanded,
                 onDismissRequest = { isThemeDropdownExpanded = false },
             ) {
-                DropdownMenuItem(
-                    text = { Text("Light") },
-                    onClick = { postEvent(Event.SetThemeStyle(ThemeStyle.Light)) },
+                @Composable
+                fun Item(text: String, style: ThemeStyle) = DropdownMenuItem(
+                    text = { Text(text) },
+                    onClick = {
+                        postEvent(Event.SetThemeStyle(style))
+                        isThemeDropdownExpanded = false
+                    },
                 )
-                DropdownMenuItem(
-                    text = { Text("Dark") },
-                    onClick = { postEvent(Event.SetThemeStyle(ThemeStyle.Dark)) },
-                )
-                DropdownMenuItem(
-                    text = { Text("System") },
-                    onClick = { postEvent(Event.SetThemeStyle(ThemeStyle.System)) },
-                )
+
+                Item("Light", ThemeStyle.Light)
+                Item("Dark", ThemeStyle.Dark)
+                Item("System", ThemeStyle.System)
             }
         }
     }

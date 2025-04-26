@@ -20,7 +20,7 @@ internal class ChooseThemeVM @Inject constructor(
     init {
         launch {
             loadSavedTheme()
-            setState { copy(previewTheme = savedTheme, isLoading = false) }
+            setState { copy(previewTheme = savedTheme) }
         }
     }
 
@@ -28,7 +28,6 @@ internal class ChooseThemeVM @Inject constructor(
         savedTheme = themePreferences.getCurrentPreferences().toThemeState()
     }
 
-    // Light colors can be assigned dark colors if user sets dark theme with no switching
     private fun ThemePreferences.ThemeModel.toThemeState() = ThemeState(
         colorsLight = ColorsLight.entries.find { it.name == lightTheme }
             ?: ColorsLight.Default,
@@ -41,8 +40,8 @@ internal class ChooseThemeVM @Inject constructor(
 
     override fun handleEvent(event: Event) {
         when (event) {
-            is Event.PreviewLightTheme -> updatePreviewTheme { copy(colorsLight = event.colors) }
-            is Event.PreviewDarkTheme -> updatePreviewTheme { copy(colorsDark = event.colors) }
+            is Event.SetLightTheme -> updatePreviewTheme { copy(colorsLight = event.colors) }
+            is Event.SetDarkTheme -> updatePreviewTheme { copy(colorsDark = event.colors) }
             is Event.SetThemeStyle -> updatePreviewTheme { copy(themeStyle = event.themeStyle) }
             Event.SaveTheme -> saveTheme()
             Event.PopBackIfSaved -> {
