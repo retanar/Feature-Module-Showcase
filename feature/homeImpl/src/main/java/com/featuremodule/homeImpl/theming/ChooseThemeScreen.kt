@@ -24,6 +24,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -46,13 +49,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.featuremodule.core.ui.theme.ColorsDark
 import com.featuremodule.core.ui.theme.ColorsLight
+import com.featuremodule.core.ui.theme.ThemeStyle
 import com.featuremodule.homeImpl.R
 
 @Composable
 internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // TODO: loader, themestyle chooser
     Scaffold(
         floatingActionButton = {
             if (!state.isThemeSaved) {
@@ -71,6 +74,8 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            ThemeStyleChooser(state.previewTheme.themeStyle, viewModel::postEvent)
+
             Text(
                 text = "Light themes",
                 fontWeight = FontWeight.SemiBold,
@@ -131,6 +136,61 @@ internal fun ChooseThemeScreen(viewModel: ChooseThemeVM = hiltViewModel()) {
 
     BackHandler(enabled = !state.isThemeSaved) {
         viewModel.postEvent(Event.PopBackIfSaved)
+    }
+}
+
+@Composable
+private fun ThemeStyleChooser(
+    themeStyle: ThemeStyle,
+    postEvent: (Event) -> Unit,
+) {
+    var isThemeDropdownExpanded = false
+
+    Row(
+        modifier = Modifier.height(48.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "Theme style",
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .weight(1f),
+        )
+
+        Box {
+            // Additional clip is needed to limit Ripple effect
+            Text(
+                text = themeStyle.toString(),
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceContainer,
+                        shape = MaterialTheme.shapes.medium,
+                    )
+                    .clip(shape = MaterialTheme.shapes.medium)
+                    .clickable { isThemeDropdownExpanded = !isThemeDropdownExpanded }
+                    .padding(all = 8.dp),
+            )
+
+            DropdownMenu(
+                expanded = isThemeDropdownExpanded,
+                onDismissRequest = { isThemeDropdownExpanded = false },
+            ) {
+                DropdownMenuItem(
+                    text = { Text("Light") },
+                    onClick = { postEvent(Event.SetThemeStyle(ThemeStyle.Light)) },
+                )
+                DropdownMenuItem(
+                    text = { Text("Dark") },
+                    onClick = { postEvent(Event.SetThemeStyle(ThemeStyle.Dark)) },
+                )
+                DropdownMenuItem(
+                    text = { Text("System") },
+                    onClick = { postEvent(Event.SetThemeStyle(ThemeStyle.System)) },
+                )
+            }
+        }
     }
 }
 
