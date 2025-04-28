@@ -21,7 +21,7 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "feature-module-template"
+rootProject.name = "Feature-Module-Showcase"
 include(
     ":app",
     ":feature:homeApi",

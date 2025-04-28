@@ -3,24 +3,35 @@
 Template project for starting android development. Although it grew to be more of a showcase of
 different feature implementations, most of which are contained on Home screen:
 
-- Passing navigation arguments forward.
+- Passing navigation arguments forward and backward.
+- Animated splash screen.
+- Linters in Github actions.
+- Gradle tasks and convention plugins.
 - Exoplayer implementation with custom controls overlay.
-- In-app camera implementation and passing photo back in navigation.
+- In-app camera implementation.
 - Barcode scanning with ML Kit.
-- Creating custom CompositionLocal for colors (partly shown on Feature tab).
+- Custom CompositionLocal for colors (partly shown on Feature tab).
 - SMS authentication with firebase in sms-authentication branch.
+- Connecting to Wi-Fi networks.
+- Multiple app themes.
 
 ### Screenshots
 
-![](readme_res/app_recording_20240423.gif)
-
 Splash screen
 
-<img src="readme_res/splash_screen_20240703.gif" width="480"/>
+![splash](readme_res/splash_screen_20240703.gif)
+
+Initial functionality
+
+![](readme_res/app_recording_20240423.gif)
 
 Exoplayer video playback
 
 ![exoplayer](readme_res/exoplayer_20241115.gif)
+
+Themes
+
+![themes](readme_res/themes_20250428.gif)
 
 ### Quick overview
 
